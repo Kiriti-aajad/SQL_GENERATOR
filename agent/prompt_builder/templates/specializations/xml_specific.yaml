@@ -1,0 +1,309 @@
+# XML-Specific Specialization Template
+# Enhanced XML handling patterns and optimizations
+
+specialization_type: "xml_specific"
+description: "Advanced XML data extraction and manipulation patterns"
+priority: 4
+applies_to: ["xml_extraction", "join_query", "simple_select"]
+
+# XML-specific system additions
+system_additions:
+  xml_expertise: "XML data extraction specialist with deep XPath and SQL XML method knowledge"
+  xpath_precision: "Use exact XPath expressions as provided - no modifications allowed"
+  sql_xml_methods: "Master of SQL Server XML methods: value(), exist(), query(), nodes()"
+  performance_awareness: "Optimize XML queries for performance and maintainability"
+  null_safety: "Handle XML NULL values and missing elements safely"
+
+# XML instruction enhancements
+instruction_additions: |
+  ADVANCED XML EXTRACTION REQUIREMENTS:
+  - Use provided SQL XML expressions exactly as specified
+  - Always check element existence before extraction using exist() method
+  - Apply appropriate data type casting for extracted values
+  - Handle nested XML structures and arrays appropriately
+  - Consider XML schema validation when extracting data
+  - Use proper NULL handling for missing XML elements
+  - Optimize XPath expressions for performance
+  - Apply XML indexing considerations for large datasets
+
+# Advanced XML patterns
+advanced_xml_patterns:
+  
+  nested_element_extraction:
+    description: "Extract data from nested XML structures"
+    pattern: "xml_column.value('(/Root/Level1/Level2/Element)[1]', 'datatype')"
+    considerations: ["Path complexity", "Performance impact", "NULL handling"]
+    
+  multiple_element_extraction:
+    description: "Extract multiple values from XML arrays"
+    pattern: "xml_column.nodes('/Root/Items/Item') as T(c)"
+    considerations: ["Row multiplication", "Join complexity", "Performance"]
+    
+  conditional_xml_extraction:
+    description: "Extract XML values based on conditions"
+    pattern: "xml_column.value('(/Root/Item[@type=\"specific\"])[1]', 'datatype')"
+    considerations: ["Attribute filtering", "Complex conditions", "Performance"]
+    
+  xml_attribute_extraction:
+    description: "Extract XML attribute values"
+    pattern: "xml_column.value('(/Root/Element/@attribute)[1]', 'datatype')"
+    considerations: ["Attribute vs element", "Data type handling", "Validation"]
+
+# Comprehensive XML method usage
+xml_method_usage:
+  
+  value_method:
+    purpose: "Extract single scalar values from XML"
+    syntax: "xml_column.value('xpath_expression', 'sql_datatype')"
+    best_practices:
+      - "Always use [1] indexer for single value extraction"
+      - "Cast to appropriate SQL data type"
+      - "Handle potential NULL returns"
+      - "Use specific XPath for better performance"
+    
+    examples:
+      simple_element: "contact_xml.value('(/Contact/Email)[1]', 'VARCHAR(255)')"
+      nested_element: "contact_xml.value('(/Contact/Address/Street)[1]', 'VARCHAR(500)')"
+      attribute_value: "contact_xml.value('(/Contact/@type)[1]', 'VARCHAR(50)')"
+      conditional_element: "contact_xml.value('(/Contact/Phone[@type=\"mobile\"])[1]', 'VARCHAR(20)')"
+  
+  exist_method:
+    purpose: "Check existence of XML elements or attributes"
+    syntax: "xml_column.exist('xpath_expression') = 1"
+    best_practices:
+      - "Use in WHERE clauses for filtering"
+      - "Check existence before extraction"
+      - "Combine with value() method for safety"
+      - "Use for conditional logic"
+    
+    examples:
+      element_exists: "contact_xml.exist('/Contact/Email') = 1"
+      attribute_exists: "contact_xml.exist('/Contact/@verified') = 1"
+      conditional_exists: "contact_xml.exist('/Contact/Phone[@type=\"mobile\"]') = 1"
+      nested_exists: "contact_xml.exist('/Contact/Address/Country') = 1"
+  
+  query_method:
+    purpose: "Return XML fragments or multiple elements"
+    syntax: "xml_column.query('xpath_expression')"
+    best_practices:
+      - "Use for extracting XML fragments"
+      - "Useful for multiple related elements"
+      - "Consider performance implications"
+      - "Handle returned XML appropriately"
+    
+    examples:
+      fragment_extraction: "contact_xml.query('/Contact/Address')"
+      multiple_elements: "contact_xml.query('/Contact/Phone')"
+      filtered_elements: "contact_xml.query('/Contact/Phone[@type=\"business\"]')"
+  
+  nodes_method:
+    purpose: "Split XML into multiple rows"
+    syntax: "xml_column.nodes('xpath_expression') as T(c)"
+    best_practices:
+      - "Use for XML arrays and repeated elements"
+      - "Creates one row per matching node"
+      - "Use in FROM clause as table source"
+      - "Combine with CROSS APPLY"
+    
+    examples:
+      split_array: "contact_xml.nodes('/Contact/Phones/Phone') as T(c)"
+      complex_split: "contact_xml.nodes('/Contact/Addresses/Address') as T(c)"
+
+# XML performance optimization
+xml_performance_optimization:
+  
+  xpath_optimization:
+    specific_paths: "Use specific XPath expressions rather than broad searches"
+    avoid_wildcards: "Minimize use of wildcards (*) in XPath"
+    index_usage: "Leverage XML indexes when available"
+    early_filtering: "Use exist() method for early filtering"
+    
+  query_structure:
+    filter_first: "Filter XML records before extraction when possible"
+    minimize_extractions: "Extract only required values"
+    batch_operations: "Consider batching XML operations"
+    avoid_complex_xpath: "Simplify complex XPath expressions"
+    
+  indexing_strategies:
+    primary_xml_index: "Create primary XML index on XML columns"
+    secondary_indexes: "Create secondary XML indexes for frequently queried paths"
+    path_indexes: "Use PATH secondary indexes for value() and exist() queries"
+    value_indexes: "Use VALUE secondary indexes for specific value queries"
+    property_indexes: "Use PROPERTY secondary indexes for property bag scenarios"
+
+# Financial domain XML patterns
+financial_xml_patterns:
+  
+  counterparty_contact_xml:
+    description: "Extract counterparty contact information from XML"
+    common_structure: |
+      <ContactInfo>
+        <Email>contact@example.com</Email>
+        <Phone type="business">+1-555-0123</Phone>
+        <Address>
+          <Street>123 Main St</Street>
+          <City>New York</City>
+          <Country>USA</Country>
+        </Address>
+      </ContactInfo>
+    
+    extraction_patterns:
+      email: "contact_xml.value('(/ContactInfo/Email)[1]', 'VARCHAR(255)')"
+      business_phone: "contact_xml.value('(/ContactInfo/Phone[@type=\"business\"])[1]', 'VARCHAR(20)')"
+      full_address: "contact_xml.value('(/ContactInfo/Address/Street)[1]', 'VARCHAR(500)') + ', ' + contact_xml.value('(/ContactInfo/Address/City)[1]', 'VARCHAR(100)')"
+  
+  trade_details_xml:
+    description: "Extract trade-specific details from XML"
+    common_structure: |
+      <TradeDetails>
+        <Instrument type="Bond">
+          <ISIN>US1234567890</ISIN>
+          <Currency>USD</Currency>
+        </Instrument>
+        <Quantity>1000000</Quantity>
+        <Price>98.75</Price>
+        <Settlement>
+          <Date>2024-01-15</Date>
+          <Instructions>DvP</Instructions>
+        </Settlement>
+      </TradeDetails>
+    
+    extraction_patterns:
+      instrument_type: "trade_xml.value('(/TradeDetails/Instrument/@type)[1]', 'VARCHAR(50)')"
+      isin: "trade_xml.value('(/TradeDetails/Instrument/ISIN)[1]', 'VARCHAR(12)')"
+      quantity: "trade_xml.value('(/TradeDetails/Quantity)[1]', 'DECIMAL(18,2)')"
+      settlement_date: "trade_xml.value('(/TradeDetails/Settlement/Date)[1]', 'DATE')"
+  
+  risk_parameters_xml:
+    description: "Extract risk calculation parameters from XML"
+    common_structure: |
+      <RiskParams>
+        <VaR confidence="95">125000.00</VaR>
+        <Exposure gross="true">500000.00</Exposure>
+        <Rating agency="SP">AA-</Rating>
+        <Limits>
+          <Credit>1000000.00</Credit>
+          <Market>750000.00</Market>
+        </Limits>
+      </RiskParams>
+    
+    extraction_patterns:
+      var_95: "risk_xml.value('(/RiskParams/VaR[@confidence=\"95\"])[1]', 'DECIMAL(18,2)')"
+      gross_exposure: "risk_xml.value('(/RiskParams/Exposure[@gross=\"true\"])[1]', 'DECIMAL(18,2)')"
+      credit_rating: "risk_xml.value('(/RiskParams/Rating)[1]', 'VARCHAR(10)')"
+      credit_limit: "risk_xml.value('(/RiskParams/Limits/Credit)[1]', 'DECIMAL(18,2)')"
+
+# Complex XML scenarios
+complex_xml_scenarios:
+  
+  xml_arrays_processing:
+    description: "Handle XML arrays with multiple similar elements"
+    example_query: |
+      SELECT 
+          cp.counterparty_id,
+          cp.legal_entity_name,
+          phone.value('(@type)[1]', 'VARCHAR(20)') as phone_type,
+          phone.value('(text())[1]', 'VARCHAR(50)') as phone_number
+      FROM tblcounterparty cp
+      CROSS APPLY cp.contact_xml.nodes('/ContactInfo/Phones/Phone') as T(phone)
+      WHERE cp.contact_xml.exist('/ContactInfo/Phones/Phone') = 1
+    
+    considerations: ["Row multiplication", "Performance impact", "NULL handling"]
+  
+  conditional_xml_extraction:
+    description: "Extract XML values based on complex conditions"
+    example_query: |
+      SELECT 
+          t.trade_id,
+          CASE 
+              WHEN t.trade_xml.exist('/Trade/Instrument[@type="Bond"]') = 1 
+              THEN t.trade_xml.value('(/Trade/Instrument/ISIN)[1]', 'VARCHAR(12)')
+              WHEN t.trade_xml.exist('/Trade/Instrument[@type="Equity"]') = 1
+              THEN t.trade_xml.value('(/Trade/Instrument/Ticker)[1]', 'VARCHAR(10)')
+              ELSE 'Unknown'
+          END as instrument_identifier
+      FROM tbltrades t
+      WHERE t.trade_xml.exist('/Trade/Instrument') = 1
+    
+    considerations: ["Complex logic", "Performance", "Maintainability"]
+  
+  xml_aggregation:
+    description: "Aggregate extracted XML values"
+    example_query: |
+      SELECT 
+          cp.counterparty_type,
+          COUNT(*) as counterparty_count,
+          COUNT(CASE WHEN cp.contact_xml.exist('/ContactInfo/Email') = 1 THEN 1 END) as with_email,
+          COUNT(CASE WHEN cp.contact_xml.exist('/ContactInfo/Phone') = 1 THEN 1 END) as with_phone
+      FROM tblcounterparty cp
+      WHERE cp.contact_xml IS NOT NULL
+      GROUP BY cp.counterparty_type
+    
+    considerations: ["NULL handling", "Existence checking", "Performance"]
+
+# XML validation and error handling
+xml_validation_patterns:
+  
+  schema_validation:
+    description: "Validate XML against schema when available"
+    considerations: ["Performance impact", "Error handling", "Business rules"]
+    
+  data_validation:
+    email_format: "Validate extracted email addresses using pattern matching"
+    phone_format: "Validate phone number formats and lengths"
+    date_validation: "Ensure extracted dates are valid and in expected format"
+    numeric_validation: "Validate numeric extractions and handle conversion errors"
+    
+  error_handling:
+    null_xml_columns: "Handle NULL XML columns gracefully"
+    malformed_xml: "Handle malformed XML data appropriately"
+    missing_elements: "Provide defaults for missing required elements"
+    data_type_errors: "Handle data type conversion errors"
+
+# XML maintenance and optimization
+xml_maintenance:
+  
+  monitoring_patterns:
+    extraction_performance: "Monitor XML extraction query performance"
+    index_usage: "Monitor XML index usage and effectiveness"
+    error_rates: "Track XML extraction error rates"
+    
+  optimization_strategies:
+    path_simplification: "Simplify complex XPath expressions"
+    extraction_batching: "Batch XML extractions for efficiency"
+    caching_strategies: "Cache frequently extracted XML values"
+    indexing_tuning: "Tune XML indexes based on query patterns"
+
+# Template integration
+template_integration:
+  
+  with_join_queries:
+    description: "Combine XML extraction with table joins"
+    considerations: ["JOIN performance", "XML extraction placement", "NULL handling"]
+    
+  with_aggregation:
+    description: "Aggregate extracted XML values"
+    considerations: ["GROUP BY with XML", "NULL value handling", "Performance"]
+    
+  with_filtering:
+    description: "Filter based on XML content"
+    considerations: ["Use exist() for filtering", "Index usage", "Performance"]
+
+# Template inheritance
+template_inheritance:
+  enhances_xml_queries: true
+  xml_specializations:
+    - "Advanced XPath usage"
+    - "SQL XML method optimization"
+    - "Performance tuning patterns"
+    - "Financial domain XML structures"
+    - "Complex XML scenario handling"
+  
+  compatible_with:
+    - "query_types/xml_extraction.yaml"
+    - "query_types/join_query.yaml"
+    - "query_types/simple_select.yaml"
+    - "specializations/financial_domain.yaml"
+  
+  specialization_priority: "very_high"
+  override_behavior: "deep_enhancement"

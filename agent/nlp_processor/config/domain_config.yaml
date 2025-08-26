@@ -1,0 +1,208 @@
+# Banking Domain Configuration - Business Logic & Rules
+# Specific configurations for banking/financial domain processing
+
+# Business Domain Settings
+domain:
+  name: "banking"
+  version: "1.0"
+  description: "Banking and financial services domain configuration"
+
+# Banking-Specific Entity Recognition
+entities:
+  counterparty:
+    enabled: true
+    include_contact_details: true
+    resolve_codes_to_names: true
+    priority: "high"
+    
+  application:
+    enabled: true
+    include_workflow_status: true
+    track_processing_stages: true
+    priority: "high"
+    
+  region:
+    enabled: true
+    resolve_state_codes: true
+    include_geographic_hierarchy: true
+    default_grouping: "StateAddress"
+    priority: "medium"
+    
+  financial_metrics:
+    enabled: true
+    auto_aggregate: true
+    default_operations: ["SUM", "AVG", "MAX", "COUNT"]
+    priority: "high"
+
+# Banking Query Patterns
+query_patterns:
+  customer_analysis:
+    patterns:
+      - "customers? (?:from|in) (.+)"
+      - "counterpart(?:y|ies) (?:from|in) (.+)"
+      - "clients? (?:from|in) (.+)"
+    default_tables: ["Counterparty", "CounterpartyContactAddress"]
+    required_joins: ["counterparty_to_address"]
+    
+  temporal_analysis:
+    patterns:
+      - "(?:last|past|recent) (\\d+) (?:days?|weeks?|months?|years?)"
+      - "(?:within|during) (.+)"
+      - "(?:since|from) (.+)"
+    default_columns: ["created_date", "application_date", "last_modified"]
+    auto_ordering: "DESC"
+    
+  regional_analysis:
+    patterns:
+      - "(?:by|per|from) (?:region|state|location|area)"
+      - "geographic(?:al)? (?:distribution|breakdown)"
+      - "(?:state|region)(?:-wise|\\s+wise)?"
+    default_grouping: ["StateAddress", "Region"]
+    resolve_codes: true
+    
+  financial_aggregation:
+    patterns:
+      - "(?:total|sum|aggregate) (.+)"
+      - "(?:average|mean|avg) (.+)"
+      - "(?:maximum|max|highest) (.+)"
+      - "(?:count|number) (?:of )?(.+)"
+    auto_group_by: true
+    include_context: true
+
+# Table Prioritization for Banking Domain
+table_priorities:
+  high_priority:
+    - "Counterparty"
+    - "CounterpartyContactAddress"  
+    - "Application"
+    - "ApplicationWorkflow"
+    
+  medium_priority:
+    - "Region"
+    - "StateAddress"
+    - "ContactAddress"
+    
+  low_priority:
+    - "AuditLog"
+    - "SystemConfig"
+
+# Field Mappings - Banking Terms to Database Fields
+field_mappings:
+  customer_terms:
+    - "customer": ["counterparty_name", "client_name"]
+    - "client": ["counterparty_name", "client_name"]
+    - "counterparty": ["counterparty_name"]
+    
+  location_terms:
+    - "region": ["region_name", "StateAddress"]
+    - "state": ["StateAddress", "state_code"]
+    - "location": ["StateAddress", "region_name"]
+    - "address": ["contact_address", "address_line"]
+    
+  temporal_terms:
+    - "created": ["created_date", "date_created"]
+    - "modified": ["last_modified", "updated_date"]
+    - "application": ["application_date", "app_date"]
+    
+  financial_terms:
+    - "amount": ["amount", "value", "total"]
+    - "balance": ["balance", "current_balance"]
+    - "revenue": ["revenue", "income"]
+
+# Business Rules
+business_rules:
+  data_privacy:
+    mask_sensitive_data: false  # Set to true in production
+    sensitive_fields: ["ssn", "account_number", "phone_number"]
+    
+  data_quality:
+    exclude_test_data: true
+    require_valid_dates: true
+    exclude_deleted_records: true
+    
+  compliance:
+    audit_all_queries: true
+    log_data_access: true
+    restrict_pii_access: false  # Set to true with proper auth
+
+# XML Processing - Banking Specific
+xml_processing:
+  enabled: true
+  high_priority_fields:
+    - "counterparty_xml"
+    - "application_xml"
+    - "contact_xml"
+    
+  extraction_rules:
+    counterparty:
+      extract_contact_info: true
+      extract_business_details: true
+      extract_relationship_data: true
+      
+    application:
+      extract_workflow_status: true
+      extract_processing_stages: true
+      extract_decision_history: true
+
+# Analytics Preferences
+analytics:
+  default_aggregations:
+    numerical_fields: ["SUM", "AVG", "COUNT"]
+    categorical_fields: ["COUNT", "DISTINCT_COUNT"]
+    temporal_fields: ["MIN", "MAX", "COUNT"]
+    
+  grouping_preferences:
+    regional: ["StateAddress", "region_name"]
+    temporal: ["YEAR", "MONTH", "DAY"]
+    categorical: ["counterparty_type", "application_status"]
+    
+  sorting_preferences:
+    default_order: "DESC"
+    temporal_fields: "DESC"  # Most recent first
+    numerical_fields: "DESC"  # Highest first
+    alphabetical_fields: "ASC"
+
+# Performance Optimization
+performance:
+  query_optimization:
+    use_indexes: true
+    limit_default_results: 1000
+    enable_query_caching: true
+    
+  join_optimization:
+    prefer_verified_joins: true
+    confidence_threshold: 80
+    max_join_depth: 3
+    
+  aggregation_optimization:
+    pre_aggregate_common_queries: true
+    cache_aggregation_results: true
+    optimize_group_by: true
+
+# Error Handling - Domain Specific
+error_handling:
+  unknown_entities:
+    action: "suggest_similar"
+    threshold: 0.7
+    
+  ambiguous_queries:
+    action: "request_clarification"
+    provide_options: true
+    
+  missing_data:
+    action: "warn_and_continue"
+    suggest_alternatives: true
+
+# Integration with Core Components
+integration:
+  nlp_processor:
+    use_domain_patterns: true
+    prioritize_domain_entities: true
+    
+  schema_searcher:
+    use_domain_priorities: true
+    boost_relevant_tables: true
+    
+  sql_generator:
+    use_domain_templates: true
+    apply_business_rules: true

@@ -1,0 +1,196 @@
+# Base Instructions Template
+# Core instructions for SQL generation behavior and requirements
+
+# Primary generation instructions
+generation_instructions:
+  
+  # Core directive
+  primary_directive: |
+    Generate a syntactically correct SQL query that accurately fulfills the user's request
+    using the exact table and column names provided in the schema context.
+
+  # Step-by-step approach
+  generation_steps:
+    - "Analyze the user's natural language query to understand the intent"
+    - "Identify the required tables from the provided schema context"
+    - "Select appropriate columns that fulfill the query requirements"
+    - "Determine necessary JOIN conditions using provided relationships"
+    - "Apply filtering conditions based on user criteria"
+    - "Include appropriate sorting and grouping as requested"
+    - "Validate the query logic and syntax before responding"
+
+  # Query construction guidelines
+  construction_guidelines:
+    select_clause: "Use explicit column names rather than SELECT *"
+    from_clause: "Use exact table names as provided in schema"
+    join_clause: "Use appropriate JOIN types based on requirements"
+    where_clause: "Apply filters that match user intent precisely"
+    order_clause: "Include sorting only when explicitly requested or implied"
+    group_clause: "Use GROUP BY for aggregation queries appropriately"
+
+# Name preservation instructions
+name_preservation_instructions:
+  
+  # Absolute requirements
+  absolute_requirements: |
+    MANDATORY NAMING RULES:
+    1. Table names: Use EXACTLY as provided (e.g., 'tblcounterparty' not 'counterparty')
+    2. Column names: Use EXACTLY as provided (e.g., 'counterparty_id' not 'id')
+    3. Case sensitivity: Maintain exact capitalization
+    4. Special characters: Preserve all underscores, prefixes, suffixes
+    5. No translations: Do not convert names to different conventions
+
+  # Validation requirements
+  validation_requirements:
+    - "Double-check every table name against the schema context"
+    - "Verify every column name exists in the specified table"
+    - "Ensure no name modifications or normalizations occur"
+    - "Maintain consistency throughout the entire query"
+
+  # Common mistakes to avoid
+  avoid_mistakes:
+    - "Do not remove table prefixes (tbl, dim, fact, etc.)"
+    - "Do not change underscore_case to camelCase"
+    - "Do not pluralize or singularize table names"
+    - "Do not abbreviate or expand column names"
+    - "Do not apply your preferred naming conventions"
+
+# Query type specific instructions
+query_type_instructions:
+  
+  # Simple SELECT queries
+  simple_select:
+    approach: "Focus on selecting the most relevant columns for the user's request"
+    considerations:
+      - "Include primary keys when selecting multiple columns"
+      - "Use appropriate data type handling"
+      - "Consider NULL value implications"
+    
+  # JOIN queries
+  join_queries:
+    approach: "Use provided relationship information to construct proper JOINs"
+    considerations:
+      - "Prefer INNER JOINs unless context suggests otherwise"
+      - "Use table aliases for complex multi-table queries"
+      - "Ensure JOIN conditions prevent Cartesian products"
+      - "Consider performance implications of JOIN order"
+    
+  # Aggregation queries
+  aggregation:
+    approach: "Use appropriate aggregate functions with proper grouping"
+    considerations:
+      - "Include necessary GROUP BY clauses"
+      - "Use HAVING for aggregate filtering"
+      - "Consider NULL handling in aggregations"
+      - "Ensure meaningful aggregation groupings"
+    
+  # XML extraction
+  xml_extraction:
+    approach: "Use provided SQL expressions for XML data extraction"
+    considerations:
+      - "Do not create custom XML extraction logic"
+      - "Use provided XPath expressions exactly"
+      - "Handle potential NULL XML values"
+      - "Consider XML structure validation"
+
+# Error handling instructions
+error_handling:
+  
+  # Insufficient information scenarios
+  insufficient_info:
+    response_strategy: |
+      If the schema context doesn't provide enough information to fulfill
+      the request, indicate what additional information is needed rather
+      than making assumptions.
+    
+    examples:
+      - "Request clarification on which specific columns are needed"
+      - "Ask for relationship information between tables"
+      - "Indicate when filter criteria are ambiguous"
+    
+  # Ambiguous queries
+  ambiguous_queries:
+    response_strategy: |
+      When the natural language query has multiple possible interpretations,
+      choose the most straightforward interpretation or ask for clarification.
+    
+    resolution_approach:
+      - "Default to simpler interpretations"
+      - "Prefer common business logic patterns"
+      - "Avoid overly complex assumptions"
+    
+  # Schema inconsistencies
+  schema_issues:
+    response_strategy: |
+      If there are apparent inconsistencies in the provided schema information,
+      proceed with the most reliable information available and note any concerns.
+
+# Output format requirements
+output_requirements:
+  
+  # SQL formatting
+  sql_formatting:
+    style: "Clean, readable SQL with proper indentation"
+    line_breaks: "Use line breaks for major clauses"
+    indentation: "Two spaces for nested elements"
+    capitalization: "SQL keywords in UPPERCASE"
+    
+  # Response structure
+  response_structure:
+    format: "SQL query only, no additional explanation unless requested"
+    comments: "Include SQL comments only for complex logic"
+    validation: "Ensure query is immediately executable"
+    
+  # Special formatting cases
+  special_formatting:
+    long_queries: "Break complex queries into readable sections"
+    subqueries: "Indent subqueries appropriately"
+    case_statements: "Format CASE statements for readability"
+    xml_extraction: "Format XML operations clearly"
+
+# Performance considerations
+performance_guidelines:
+  
+  # Query optimization
+  optimization_focus:
+    - "Use indexes effectively through proper WHERE clauses"
+    - "Minimize data retrieval to necessary columns only"
+    - "Use appropriate JOIN types for performance"
+    - "Consider LIMIT/TOP clauses for large result sets"
+    
+  # Efficiency principles
+  efficiency_principles:
+    - "Filter data as early as possible in the query"
+    - "Use EXISTS instead of IN for subqueries when appropriate"
+    - "Avoid functions in WHERE clauses on large tables"
+    - "Consider query plan implications of ORDER BY"
+
+# Context utilization
+context_utilization:
+  
+  # Schema context usage
+  schema_usage:
+    - "Reference only tables and columns provided in context"
+    - "Use relationship information for accurate JOINs"
+    - "Leverage data type information for proper operations"
+    - "Consider constraints for query logic"
+    
+  # User query interpretation
+  query_interpretation:
+    - "Focus on explicit requirements in the user query"
+    - "Infer reasonable implicit requirements"
+    - "Prioritize accuracy over complexity"
+    - "Maintain business logic consistency"
+
+# Final validation checklist
+validation_checklist:
+  
+  # Pre-response validation
+  final_checks:
+    - "All table names match schema context exactly"
+    - "All column names exist in referenced tables"
+    - "JOIN conditions are logically correct"
+    - "WHERE clauses address user requirements"
+    - "SQL syntax is correct and executable"
+    - "Query intent matches user request"
+    - "No naming conventions have been altered"

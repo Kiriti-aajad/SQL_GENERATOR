@@ -1,0 +1,181 @@
+# Join Query Template  
+# Specialized template for multi-table JOIN queries
+
+query_type: "join_query"
+description: "Template for queries requiring JOIN operations between multiple tables"
+priority: 2
+
+# System context additions specific to join queries
+system_additions:
+  query_focus: "Focus on proper JOIN syntax and relationship utilization"
+  complexity_guidance: "Emphasize correct JOIN conditions to avoid Cartesian products"
+  relationship_importance: "Utilize provided foreign key relationships for accurate JOINs"
+  performance_awareness: "Consider JOIN order and indexing for optimal performance"
+
+# Instruction additions for join queries
+instruction_additions: |
+  JOIN QUERY GUIDANCE:
+  - Use the relationship information provided in the schema context
+  - Prefer INNER JOINs unless explicitly told otherwise
+  - Use table aliases for readability in multi-table queries
+  - Ensure all JOIN conditions are properly specified
+  - Verify that JOIN logic matches the user's intent
+  - Consider the logical order of JOINs for performance
+
+# Advanced construction patterns for joins
+construction_patterns:
+  join_strategy:
+    prefer_inner_joins: true
+    use_table_aliases: true
+    explicit_join_conditions: true
+    logical_join_order: true
+  
+  relationship_utilization:
+    use_foreign_key_relationships: true
+    validate_join_conditions: true
+    avoid_cartesian_products: true
+  
+  column_selection:
+    qualify_column_names: true
+    select_from_relevant_tables: true
+    avoid_duplicate_columns: true
+  
+  filtering_strategy:
+    apply_filters_appropriately: true
+    use_where_vs_join_conditions: true
+    optimize_filter_placement: true
+
+# JOIN-specific examples
+examples:
+  basic_inner_join: |
+    Example: "Show customers with their orders"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        o.order_id,
+        o.order_date,
+        o.order_amount
+    FROM tblcustomers c
+    INNER JOIN tblorders o ON c.customer_id = o.customer_id
+
+  multi_table_join: |
+    Example: "Show customers, their orders, and order details"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        o.order_id,
+        od.product_name,
+        od.quantity,
+        od.unit_price
+    FROM tblcustomers c
+    INNER JOIN tblorders o ON c.customer_id = o.customer_id
+    INNER JOIN tblorderdetails od ON o.order_id = od.order_id
+
+  filtered_join: |
+    Example: "Show bank customers with their recent orders"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        o.order_id,
+        o.order_date
+    FROM tblcustomers c
+    INNER JOIN tblorders o ON c.customer_id = o.customer_id
+    WHERE c.customer_type = 'BANK'
+        AND o.order_date >= DATEADD(month, -1, GETDATE())
+
+  left_join_example: |
+    Example: "Show all customers and their orders (including customers without orders)"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        o.order_id,
+        o.order_date
+    FROM tblcustomers c
+    LEFT JOIN tblorders o ON c.customer_id = o.customer_id
+
+# JOIN-specific validation rules
+validation_rules:
+  - "All JOIN operations must have explicit ON conditions"
+  - "JOIN conditions should use foreign key relationships from schema"
+  - "Table aliases should be used for multi-table queries"
+  - "Column references should be properly qualified with table aliases"
+  - "Avoid Cartesian products by ensuring proper JOIN conditions"
+  - "JOIN order should be logical and performance-conscious"
+  - "Use exact table and column names as provided in schema"
+
+# JOIN error prevention
+error_prevention:
+  common_join_mistakes:
+    - "Missing JOIN conditions leading to Cartesian products"
+    - "Using wrong columns for JOIN conditions"
+    - "Incorrect JOIN type selection (INNER vs LEFT vs RIGHT)"
+    - "Poor table alias choices or missing aliases"
+    - "Ambiguous column references"
+    - "Incorrect JOIN order affecting performance"
+  
+  prevention_strategies:
+    - "Always verify JOIN conditions against schema relationships"
+    - "Use descriptive but concise table aliases"
+    - "Qualify all column references in multi-table queries"
+    - "Double-check JOIN logic against user intent"
+    - "Consider NULL handling in LEFT/RIGHT JOINs"
+
+# Relationship analysis guidance
+relationship_analysis:
+  foreign_key_utilization:
+    - "Use provided foreign key information for JOIN conditions"
+    - "Validate that JOIN columns have compatible data types"
+    - "Consider referential integrity constraints"
+  
+  join_type_selection:
+    inner_join: "Use when you need matching records from both tables"
+    left_join: "Use when you need all records from left table"
+    right_join: "Use when you need all records from right table"
+    full_outer_join: "Use when you need all records from both tables"
+  
+  performance_considerations:
+    - "Join smaller tables first when possible"
+    - "Use indexes on JOIN columns for better performance"
+    - "Consider query execution plan implications"
+    - "Avoid unnecessary JOINs if data can be retrieved differently"
+
+# Multi-table query strategies
+multi_table_strategies:
+  table_ordering:
+    principle: "Join tables in logical business relationship order"
+    considerations:
+      - "Start with main entity table"
+      - "Join related tables based on cardinality"
+      - "Consider filter selectivity"
+  
+  alias_conventions:
+    use_meaningful_aliases: true
+    keep_aliases_short: true
+    consistent_naming: true
+    examples:
+      - "tblcustomers -> c"
+      - "tblorders -> o"  
+      - "tblorderdetails -> od"
+      - "tblproducts -> p"
+  
+  column_selection_strategy:
+    - "Select columns from all relevant tables"
+    - "Avoid selecting unnecessary columns"
+    - "Qualify ambiguous column names"
+    - "Use table aliases in column references"
+
+# Advanced JOIN scenarios
+advanced_scenarios:
+  self_joins:
+    description: "When a table needs to be joined with itself"
+    example_use_case: "Employee hierarchy, category relationships"
+    alias_requirement: "Must use different aliases for same table"
+  
+  complex_conditions:
+    multiple_join_conditions: "Use AND to combine multiple conditions"
+    conditional_joins: "Use CASE statements in JOIN conditions when needed"
+    date_range_joins: "Handle date/time range conditions in JOINs"
+  
+  subquery_alternatives:
+    when_to_use_joins: "Prefer JOINs over correlated subqueries for performance"
+    exists_vs_joins

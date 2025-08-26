@@ -1,0 +1,511 @@
+# Enhanced Template Configuration with Intelligent Schema Integration
+# Integrates dynamic entity detection and intelligent template selection
+# Supports your proven 60-80% table reduction and entity-aware processing
+
+# Enhanced template selection rules with intelligent capabilities
+template_selection:
+  
+  # Simple SELECT queries (enhanced with intelligence)
+  simple_select:
+    template_type: "simple_select"
+    priority: 1
+    triggers:
+      complexity: ["low", "medium", "high"]
+      table_count: "<= 10"
+      involves_joins: false
+      involves_aggregation: false
+      keywords: 
+        - "show"
+        - "find"
+        - "list"
+        - "display"
+        - "fetch"
+        - "get"
+        - "select"
+        - "counterparty"
+        - "counterparties"
+        - "contact"
+        - "name"
+        - "entity"
+        - "type"
+        - "all"
+        - "email"
+        - "phone"
+        - "address"
+        - "details"
+        - "customer"
+        - "customers"
+        - "order"
+        - "orders"
+        - "trade"
+        - "position"
+        - "positions"
+        - "tblcounterparty"
+        - "tblpositions"
+        - "tbltrades"
+        - "tblorders"
+      # NEW: Intelligent triggers
+      intelligent_filtering_applied: true
+      schema_confidence: "> 0.6"
+    base_template: "base/system_context.yaml"
+    context_sections: ["intelligence", "tables", "columns"]  # Added intelligence section
+    # NEW: Intelligence-aware specializations
+    intelligent_specializations: ["intelligence/simple_with_entities.yaml"]
+    
+  # JOIN queries (enhanced with intelligent relationship detection)
+  join_query:
+    template_type: "join_query"
+    priority: 2
+    triggers:
+      involves_joins: true
+      table_count: "> 1"
+      keywords: 
+        - "join"
+        - "relationship"
+        - "connect"
+        - "link"
+        - "with"
+        - "and"
+        - "together"
+        - "linked"
+        - "combine"
+        - "associated"
+        - "counterparty"
+        - "order"
+        - "trade"
+        - "position"
+        - "portfolio"
+        - "tblcounterparty"
+        - "tbltrades"
+        - "tblpositions"
+      # NEW: Intelligent join detection
+      intelligent_joins_detected: true
+      relationship_confidence: "> 0.5"
+    base_template: "base/system_context.yaml"
+    specializations: ["query_types/join_query.yaml"]
+    context_sections: ["intelligence", "tables", "columns", "relationships"]
+    # NEW: Intelligent join specializations
+    intelligent_specializations: ["intelligence/smart_joins.yaml"]
+    
+  # XML extraction queries (enhanced with intelligent XML detection)
+  xml_extraction:
+    template_type: "xml_extraction"
+    priority: 3
+    triggers:
+      involves_xml: true
+      keywords: 
+        - "xml"
+        - "extract"
+        - "xpath"
+        - "contact"
+        - "address"
+        - "xml_email"
+        - "xml_phone"
+        - "xml_address"
+        - "tblcounterparty"
+        - "contact_xml"
+      # NEW: Intelligent XML detection
+      xml_fields_detected: "> 0"
+      xml_relevance_score: "> 0.4"
+    base_template: "base/system_context.yaml"
+    specializations: ["query_types/xml_extraction.yaml", "specializations/xml_specific.yaml"]
+    context_sections: ["intelligence", "tables", "columns", "xml_mappings"]
+    # NEW: Intelligent XML specializations
+    intelligent_specializations: ["intelligence/smart_xml.yaml"]
+    
+  # Aggregation queries (enhanced with intelligent aggregation detection)
+  aggregation:
+    template_type: "aggregation"
+    priority: 2
+    triggers:
+      involves_aggregation: true
+      keywords: 
+        - "count"
+        - "sum"
+        - "average"
+        - "avg"
+        - "total"
+        - "max"
+        - "min"
+        - "group"
+        - "how many"
+        - "number of"
+        - "aggregate"
+        - "by type"
+        - "per"
+        - "grouped"
+        - "most recent"
+        - "latest"
+        - "first"
+        - "last"
+      # NEW: Intelligent aggregation detection
+      temporal_indicators_detected: true
+      aggregation_confidence: "> 0.6"
+    base_template: "base/system_context.yaml"
+    specializations: ["query_types/aggregation.yaml"]
+    context_sections: ["intelligence", "tables", "columns", "relationships"]
+    # NEW: Intelligent aggregation specializations
+    intelligent_specializations: ["intelligence/smart_aggregation.yaml"]
+    
+  # Complex filtering queries (enhanced with intelligent filter detection)
+  complex_filter:
+    template_type: "complex_filter"
+    priority: 2
+    triggers:
+      complexity: ["medium", "high"]
+      keywords: 
+        - "where"
+        - "filter"
+        - "condition"
+        - "criteria"
+        - "between"
+        - "like"
+        - "greater than"
+        - "less than"
+        - "range"
+        - "match"
+        - "contains"
+        - "equals"
+        - "not equal"
+        - "specific"
+        - "particular"
+        - "only"
+      # NEW: Intelligent complexity assessment
+      complexity_factors_detected: "> 3"
+      filter_confidence: "> 0.5"
+    base_template: "base/system_context.yaml"
+    context_sections: ["intelligence", "tables", "columns", "relationships"]
+    # NEW: Intelligent filtering specializations
+    intelligent_specializations: ["intelligence/smart_filters.yaml"]
+    
+  # Multi-table complex queries (enhanced with intelligent multi-table handling)
+  multi_table:
+    template_type: "multi_table"
+    priority: 1
+    triggers:
+      table_count: "> 3"
+      complexity: ["medium", "high"]
+      keywords:
+        - "multiple tables"
+        - "from"
+        - "across"
+        - "various"
+        - "different"
+        - "along with"
+        - "together with"
+      # NEW: Intelligent multi-table detection
+      intelligent_table_reduction_applied: true
+      table_reduction_percentage: "> 50"
+    base_template: "base/system_context.yaml"
+    context_sections: ["intelligence", "tables", "columns", "relationships"]
+    # NEW: Multi-table intelligence
+    intelligent_specializations: ["intelligence/multi_table_optimization.yaml"]
+
+  # NEW: Entity-specific template selection
+  entity_director:
+    template_type: "entity_specific"
+    priority: 4
+    triggers:
+      detected_entities: ["director"]
+      entity_confidence: "> 0.7"
+      keywords:
+        - "director"
+        - "board"
+        - "executive"
+        - "management"
+        - "board member"
+        - "director information"
+        - "director details"
+    base_template: "base/system_context.yaml"
+    specializations: ["entities/director_queries.yaml"]
+    context_sections: ["intelligence", "tables", "columns", "relationships"]
+    intelligent_specializations: ["intelligence/director_focused.yaml"]
+
+  entity_contact:
+    template_type: "entity_specific"
+    priority: 4
+    triggers:
+      detected_entities: ["contact"]
+      entity_confidence: "> 0.7"
+      keywords:
+        - "contact"
+        - "contact information"
+        - "contact details"
+        - "phone"
+        - "email"
+        - "address"
+        - "communication"
+    base_template: "base/system_context.yaml"
+    specializations: ["entities/contact_queries.yaml"]
+    context_sections: ["intelligence", "tables", "columns", "xml_mappings"]
+    intelligent_specializations: ["intelligence/contact_focused.yaml"]
+
+  entity_application:
+    template_type: "entity_specific"
+    priority: 4
+    triggers:
+      detected_entities: ["application"]
+      entity_confidence: "> 0.7"
+      keywords:
+        - "application"
+        - "app"
+        - "request"
+        - "submission"
+        - "tracking"
+        - "application status"
+    base_template: "base/system_context.yaml"
+    specializations: ["entities/application_queries.yaml"]
+    context_sections: ["intelligence", "tables", "columns", "relationships"]
+    intelligent_specializations: ["intelligence/application_focused.yaml"]
+
+  entity_workflow:
+    template_type: "entity_specific"
+    priority: 4
+    triggers:
+      detected_entities: ["workflow"]
+      entity_confidence: "> 0.7"
+      keywords:
+        - "workflow"
+        - "process"
+        - "action"
+        - "abort"
+        - "terminate"
+        - "workflow action"
+        - "process status"
+        - "most recent"
+        - "group requestor"
+    base_template: "base/system_context.yaml"
+    specializations: ["entities/workflow_queries.yaml"]
+    context_sections: ["intelligence", "tables", "columns", "relationships"]
+    intelligent_specializations: ["intelligence/workflow_focused.yaml"]
+
+  # NEW: High-confidence intelligent template
+  intelligent_optimized:
+    template_type: "intelligent_optimized"
+    priority: 5  # Highest priority when conditions met
+    triggers:
+      intelligent_filtering_applied: true
+      schema_confidence: "> 0.8"
+      table_reduction_percentage: "> 60"  # Your proven 60-80% reduction
+      reasoning_applied: true
+    base_template: "base/intelligent_context.yaml"
+    specializations: ["intelligence/high_confidence.yaml"]
+    context_sections: ["intelligence", "tables", "columns", "relationships", "xml_mappings"]
+    intelligent_specializations: ["intelligence/full_optimization.yaml"]
+
+  # Enhanced general fallback with intelligence
+  intelligent_fallback:
+    template_type: "simple_select"
+    priority: 1
+    triggers:
+      intelligent_filtering_applied: true
+      schema_confidence: "> 0.3"
+      keywords: []
+    base_template: "base/system_context.yaml"
+    context_sections: ["intelligence", "tables", "columns"]
+    intelligent_specializations: ["intelligence/basic_enhancement.yaml"]
+
+  # Traditional fallback (unchanged)
+  general_fallback:
+    template_type: "simple_select"
+    priority: 0
+    triggers:
+      keywords: []
+    base_template: "base/system_context.yaml"
+    context_sections: ["tables", "columns"]
+
+# Enhanced default template with intelligence support
+default_template:
+  template_type: "simple_select"
+  base_template: "base/system_context.yaml"
+  context_sections: ["intelligence", "tables", "columns"]
+  intelligent_fallback: true
+
+# Enhanced domain-specific specializations
+domain_specializations:
+  
+  # Financial domain (enhanced)
+  financial:
+    file: "specializations/financial_domain.yaml"
+    triggers:
+      keywords: 
+        - "counterparty"
+        - "position"
+        - "trade"
+        - "portfolio"
+        - "risk"
+        - "exposure"
+        - "financial"
+        - "money"
+        - "amount"
+        - "value"
+        - "price"
+      tables: 
+        - "tblcounterparty"
+        - "tblpositions"
+        - "tbltrades"
+      # NEW: Intelligent financial triggers
+      detected_entities: ["counterparty", "trade", "position"]
+      entity_confidence: "> 0.6"
+    priority_boost: 1
+    intelligent_enhancements: ["intelligence/financial_optimization.yaml"]
+    
+  # XML heavy domain (enhanced)
+  xml_heavy:
+    file: "specializations/xml_specific.yaml"
+    triggers:
+      xml_field_ratio: "> 0.3"
+      # NEW: Intelligent XML triggers
+      xml_fields_detected: "> 2"
+      xml_relevance_score: "> 0.5"
+    priority_boost: 2
+    intelligent_enhancements: ["intelligence/xml_optimization.yaml"]
+
+  # NEW: Intelligence-optimized domain
+  intelligence_optimized:
+    file: "specializations/intelligence_domain.yaml"
+    triggers:
+      intelligent_filtering_applied: true
+      table_reduction_percentage: "> 50"
+      reasoning_applied: true
+      schema_confidence: "> 0.7"
+    priority_boost: 3
+    intelligent_enhancements: ["intelligence/full_intelligence.yaml"]
+
+  # NEW: Entity-focused domains
+  entity_focused:
+    file: "specializations/entity_domain.yaml"
+    triggers:
+      detected_entities_count: "> 1"
+      entity_confidence: "> 0.6"
+      entity_priorities_available: true
+    priority_boost: 2
+    intelligent_enhancements: ["intelligence/entity_optimization.yaml"]
+
+# Enhanced template loading settings
+template_settings:
+  template_directory: "templates"
+  cache_templates: true
+  reload_on_change: false
+  
+  # Template validation (enhanced)
+  validate_on_load: true
+  required_sections: ["system_context"]
+  # NEW: Intelligence validation
+  validate_intelligent_templates: true
+  required_intelligent_sections: ["intelligence"]
+  
+  # Error handling (enhanced)
+  fallback_to_default: true
+  strict_mode: false
+  # NEW: Intelligence error handling
+  fallback_on_intelligence_failure: true
+  log_template_selection_reasoning: true
+
+# Enhanced context section priorities
+section_priorities:
+  intelligence: 15      # NEW: Highest priority for intelligence summary
+  tables: 12           # INCREASED: Critical database info
+  relationships: 11    # INCREASED: Critical join info  
+  xml_mappings: 10     # INCREASED: Critical XML info
+  columns: 9
+  validation_rules: 6
+  examples: 5
+
+# Enhanced template inheritance rules
+inheritance:
+  # Enhanced base templates
+  base_templates:
+    - "base/system_context.yaml"
+    - "base/schema_context.yaml"
+    - "base/instructions.yaml"
+    # NEW: Intelligence base templates
+    - "base/intelligent_context.yaml"
+    - "base/entity_context.yaml"
+  
+  # Override rules (enhanced)
+  override_strategy: "intelligent_merge"  # NEW: Intelligent merge strategy
+  preserve_base_context: true
+  # NEW: Intelligence inheritance
+  inherit_intelligence_sections: true
+  merge_entity_information: true
+  preserve_critical_database_elements: true
+
+# NEW: Intelligent template selection rules
+intelligent_selection:
+  
+  # Selection criteria weights
+  selection_weights:
+    schema_confidence: 0.3
+    entity_confidence: 0.25
+    table_reduction_benefit: 0.2
+    complexity_match: 0.15
+    keyword_match: 0.1
+    
+  # Selection thresholds
+  thresholds:
+    min_intelligence_confidence: 0.5
+    min_entity_confidence: 0.6
+    min_table_reduction: 30  # Minimum 30% reduction to use intelligent templates
+    
+  # Fallback behavior
+  fallback_behavior:
+    use_traditional_on_low_confidence: true
+    log_selection_reasoning: true
+    prefer_proven_templates: true
+
+# NEW: Entity-specific template configuration
+entity_templates:
+  
+  # Entity template mappings
+  entity_mappings:
+    director: "entities/director_queries.yaml"
+    contact: "entities/contact_queries.yaml"
+    application: "entities/application_queries.yaml"
+    workflow: "entities/workflow_queries.yaml"
+    counterparty: "entities/counterparty_queries.yaml"
+    
+  # Multi-entity handling
+  multi_entity_strategy: "highest_confidence"  # highest_confidence, merge_all, prioritize_first
+  entity_conflict_resolution: "confidence_based"
+  
+  # Entity confidence requirements
+  entity_requirements:
+    min_confidence: 0.6
+    require_table_mapping: true
+    validate_entity_table_consistency: true
+
+# NEW: Performance and monitoring
+performance_monitoring:
+  
+  # Template selection performance
+  track_selection_time: true
+  log_selection_performance: true
+  cache_selection_results: true
+  selection_cache_ttl: 300
+  
+  # Intelligence integration performance
+  track_intelligence_overhead: true
+  monitor_template_effectiveness: true
+  log_template_usage_stats: true
+  
+  # Quality metrics
+  track_template_accuracy: true
+  monitor_database_element_preservation: true
+  validate_critical_element_protection: true
+
+# NEW: Advanced features
+advanced_features:
+  
+  # Dynamic template generation
+  enable_dynamic_templates: false  # Future feature
+  learn_from_query_patterns: false  # Future feature
+  
+  # A/B testing capability
+  enable_template_experimentation: false
+  experiment_sample_rate: 0.1
+  
+  # Quality assurance
+  validate_all_database_elements_preserved: true
+  fail_on_critical_element_loss: true
+  log_template_validation_results: true

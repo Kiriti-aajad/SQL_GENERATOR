@@ -1,0 +1,320 @@
+# Enhanced LLM Optimizations Configuration with Dynamic Environment-Based Endpoints
+# Optimized for local models with daily-changing ngrok endpoints: Mistral, Defog, DeepSeek
+# Integrates with your proven ConfigurableSchemaFilter + IntelligentRetrievalAgent system
+
+# Enhanced model-specific configurations for your dynamic endpoint setup
+model_configurations:
+  
+  # Mistral Models (Dynamic Endpoint)
+  mistral:
+    model_family: "mistral_local"
+    endpoint_env_var: "MISTRAL_ENDPOINT"  # NEW: Environment variable reference
+    default_endpoint: "http://localhost:11434/v1/chat/completions"  # Fallback
+    max_context_length: 8192
+    optimal_prompt_length: 3500
+    
+    formatting_preferences:
+      use_clear_sections: true
+      prefer_bullet_points: true
+      include_examples: true
+      use_code_blocks: true
+      # Intelligence section formatting
+      show_intelligence_summary: true
+      highlight_entity_detection: true
+      
+    instruction_style:
+      directive_tone: "technical"
+      step_by_step: true
+      explicit_requirements: true
+      # Intelligence-aware instructions
+      include_schema_intelligence_context: true
+      emphasize_table_reduction_benefits: true
+      
+    performance_optimizations:
+      reduce_redundancy: true
+      prioritize_clarity: true
+      use_structured_format: true
+      # Intelligence optimizations
+      leverage_filtered_schema: true
+      optimize_for_reduced_tables: true
+      
+  # Defog Models (Dynamic Endpoint)
+  defog:
+    model_family: "defog_sql"
+    endpoint_env_var: "DEFOG_ENDPOINT"  # NEW: Environment variable reference
+    default_endpoint: "http://localhost:8080/v1/chat/completions"  # Fallback
+    max_context_length: 6144
+    optimal_prompt_length: 2800
+    
+    formatting_preferences:
+      use_clear_sections: true
+      prefer_structured_lists: true
+      include_examples: false
+      use_sql_focused_format: true
+      # SQL-optimized intelligence
+      show_table_priorities: true
+      highlight_join_relationships: true
+      
+    instruction_style:
+      directive_tone: "sql_expert"
+      focus_on_accuracy: true
+      minimize_ambiguity: true
+      # SQL-specific intelligence
+      emphasize_database_accuracy: true
+      highlight_critical_elements: true
+      
+    performance_optimizations:
+      sql_syntax_priority: true
+      optimize_for_performance: true
+      reduce_context_noise: true
+      # Intelligence for SQL
+      use_intelligent_schema_filtering: true
+      prioritize_relevant_tables: true
+      
+  # DeepSeek Models (Dynamic Endpoint)
+  deepseek:
+    model_family: "deepseek_local"
+    endpoint_env_var: "DEEPSEEK_ENDPOINT"  # NEW: Environment variable reference
+    default_endpoint: "http://localhost:11435/v1/chat/completions"  # Fallback
+    max_context_length: 7168
+    optimal_prompt_length: 3200
+    
+    formatting_preferences:
+      structured_sections: true
+      clear_headers: true
+      detailed_context: true
+      use_markdown: true
+      # DeepSeek intelligence formatting
+      show_reasoning_steps: true
+      include_confidence_scores: true
+      
+    instruction_style:
+      directive_tone: "analytical"
+      detailed_reasoning: true
+      explicit_logic: true
+      # Intelligence-enhanced instructions
+      leverage_entity_detection: true
+      use_schema_confidence: true
+      
+    performance_optimizations:
+      deep_reasoning: true
+      context_awareness: true
+      logical_consistency: true
+      # Intelligence integration
+      apply_intelligent_filtering: true
+      use_table_reduction_benefits: true
+
+  # Mathstral Models (Your Example)
+  mathstral:
+    model_family: "mathstral_local"
+    endpoint_env_var: "MATHSTRAL_ENDPOINT"  # NEW: Your example
+    default_endpoint: "http://localhost:11436/v1/chat/completions"  # Fallback
+    max_context_length: 8192
+    optimal_prompt_length: 3500
+    
+    formatting_preferences:
+      use_clear_sections: true
+      mathematical_reasoning: true
+      logical_structure: true
+      show_intelligence_summary: true
+      
+    instruction_style:
+      directive_tone: "mathematical"
+      logical_reasoning: true
+      precise_requirements: true
+      include_schema_intelligence_context: true
+      
+    performance_optimizations:
+      mathematical_accuracy: true
+      logical_consistency: true
+      leverage_filtered_schema: true
+
+# NEW: Dynamic endpoint management
+endpoint_management:
+  
+  # Environment variable configuration
+  environment_variables:
+    required_env_vars:
+      - "MISTRAL_ENDPOINT"
+      - "DEFOG_ENDPOINT" 
+      - "DEEPSEEK_ENDPOINT"
+      - "MATHSTRAL_ENDPOINT"
+    
+    optional_env_vars:
+      - "CLAUDE_ENDPOINT"    # If you add Claude later
+      - "LLAMA_ENDPOINT"     # If you add Llama later
+    
+    validation:
+      validate_on_startup: true
+      validate_url_format: true
+      required_url_pattern: "https://.+\\.ngrok-free\\.app/v1/chat/completions"
+      
+  # Dynamic endpoint loading
+  endpoint_loading:
+    load_on_startup: true
+    reload_interval_minutes: 60  # Check for changes every hour
+    cache_endpoints: true
+    log_endpoint_changes: true
+    
+  # Fallback handling
+  fallback_strategy:
+    use_default_on_missing_env: true
+    try_multiple_endpoints: true
+    endpoint_health_check: true
+    health_check_timeout: 5  # seconds
+
+# Enhanced local model deployment settings with dynamic endpoints
+local_deployment:
+  
+  # Dynamic model endpoints
+  model_endpoints:
+    mistral:
+      endpoint_source: "environment"  # NEW: Source type
+      env_var: "MISTRAL_ENDPOINT"
+      model_name: "mistral:latest"
+      headers:
+        "ngrok-skip-browser-warning": "true"  # NEW: Skip ngrok warning
+        "Content-Type": "application/json"
+      
+    defog:
+      endpoint_source: "environment"
+      env_var: "DEFOG_ENDPOINT"
+      model_name: "defog-sql:latest"
+      headers:
+        "ngrok-skip-browser-warning": "true"
+        "Content-Type": "application/json"
+      
+    deepseek:
+      endpoint_source: "environment"
+      env_var: "DEEPSEEK_ENDPOINT"
+      model_name: "deepseek-coder:latest"
+      headers:
+        "ngrok-skip-browser-warning": "true"
+        "Content-Type": "application/json"
+        
+    mathstral:
+      endpoint_source: "environment"
+      env_var: "MATHSTRAL_ENDPOINT"
+      model_name: "mathstral:latest"
+      headers:
+        "ngrok-skip-browser-warning": "true"
+        "Content-Type": "application/json"
+  
+  # Connection settings for ngrok endpoints
+  connection_settings:
+    timeout_seconds: 45  # Longer for ngrok
+    retry_attempts: 3
+    connection_pool_size: 5
+    # NEW: ngrok-specific settings
+    verify_ssl: true
+    follow_redirects: true
+    max_redirects: 3
+    
+  # Enhanced health checks for dynamic endpoints
+  health_checks:
+    enable_health_monitoring: true
+    health_check_interval: 300  # 5 minutes for ngrok stability
+    auto_fallback_on_failure: true
+    # NEW: ngrok-specific health checks
+    check_ngrok_status: true
+    validate_tunnel_active: true
+    log_tunnel_changes: true
+
+# Enhanced error handling for dynamic endpoints
+error_handling:
+  
+  # Endpoint-specific error handling
+  endpoint_errors:
+    ngrok_tunnel_down:
+      error_patterns: ["tunnel not found", "ngrok tunnel", "failed to complete tunnel"]
+      retry_attempts: 2
+      fallback_action: "try_next_model"
+      
+    endpoint_unreachable:
+      error_patterns: ["connection refused", "timeout", "unreachable"]
+      retry_attempts: 3
+      fallback_action: "use_default_endpoint"
+      
+    invalid_response:
+      error_patterns: ["invalid json", "malformed response", "unexpected format"]
+      retry_attempts: 2
+      fallback_action: "simplify_prompt"
+  
+  model_unavailable:
+    primary_fallback: "mistral"
+    secondary_fallback: "defog"
+    tertiary_fallback: "deepseek"
+    fallback_prompt_format: "simplified"
+    
+  # NEW: Dynamic endpoint error handling
+  dynamic_endpoint_errors:
+    environment_var_missing:
+      action: "use_default_endpoint"
+      log_level: "warning"
+      
+    invalid_endpoint_format:
+      action: "validate_and_correct"
+      fallback_to_default: true
+      
+    daily_endpoint_change:
+      action: "reload_configuration"
+      notify_admin: true
+
+# NEW: Environment variable helper functions (for implementation)
+environment_helpers:
+  
+  # Validation functions
+  validation:
+    url_pattern: "^https://[a-zA-Z0-9]+\\.ngrok-free\\.app/v1/chat/completions$"
+    required_protocols: ["https"]
+    required_domains: ["ngrok-free.app"]
+    required_paths: ["/v1/chat/completions"]
+    
+  # Loading functions
+  loading:
+    auto_detect_changes: true
+    cache_duration_minutes: 30
+    validate_before_use: true
+    
+  # Monitoring functions
+  monitoring:
+    track_endpoint_changes: true
+    log_endpoint_usage: true
+    monitor_response_times: true
+
+# Enhanced monitoring for dynamic endpoints
+monitoring:
+  
+  track_metrics:
+    - "prompt_length"
+    - "response_time"
+    - "sql_validity"
+    - "name_preservation_accuracy"
+    - "intelligence_processing_time"
+    - "schema_confidence_achieved"
+    - "table_reduction_percentage"
+    - "entity_detection_accuracy"
+    # NEW: Endpoint metrics
+    - "endpoint_response_time"
+    - "endpoint_availability"
+    - "tunnel_stability"
+    - "endpoint_changes_per_day"
+    
+  endpoint_monitoring:
+    track_tunnel_uptime: true
+    monitor_endpoint_changes: true
+    log_connection_failures: true
+    track_fallback_usage: true
+    measure_ngrok_overhead: true
+    
+  alerts:
+    endpoint_down_alert: true
+    tunnel_change_notification: true
+    high_error_rate_alert: true
+    
+  quality_thresholds:
+    min_sql_validity: 0.95
+    min_name_preservation: 1.0
+    max_response_time_seconds: 20  # Longer for ngrok
+    min_endpoint_availability: 0.9  # 90% uptime
+    max_endpoint_changes_per_day: 5

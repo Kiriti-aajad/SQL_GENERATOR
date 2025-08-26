@@ -1,0 +1,158 @@
+# Simple Select Query Template
+# Specialized template for basic SELECT queries with single table focus
+
+query_type: "simple_select"
+description: "Template for basic single-table SELECT queries"
+priority: 1
+
+# System context additions specific to simple select
+system_additions:
+  query_focus: "Focus on straightforward data retrieval from single tables"
+  complexity_guidance: "Keep queries simple and direct - avoid unnecessary complexity"
+  optimization_note: "Prioritize readability and clarity over advanced SQL features"
+
+# Instruction additions for simple select queries
+instruction_additions: |
+  SIMPLE SELECT GUIDANCE:
+  - Focus on clear, straightforward column selection
+  - Use explicit column names rather than SELECT *
+  - Apply basic filtering conditions when specified
+  - Keep sorting simple and logical
+  - Avoid complex subqueries unless absolutely necessary
+
+# Query construction patterns
+construction_patterns:
+  select_clause:
+    approach: "explicit_columns"
+    avoid_star_select: true
+    include_primary_keys: true
+    
+  from_clause:
+    single_table_focus: true
+    avoid_aliases_unless_needed: true
+    
+  where_clause:
+    simple_conditions: true
+    avoid_complex_logic: true
+    use_standard_operators: true
+    
+  order_clause:
+    include_when_requested: true
+    default_ascending: true
+    logical_ordering: true
+
+# Examples specific to simple select
+examples:
+  basic_retrieval: |
+    Example: "Show all customers"
+    SELECT 
+        customer_id,
+        customer_name,
+        customer_type
+    FROM tblcustomers
+
+  filtered_retrieval: |
+    Example: "Show all bank customers"
+    SELECT 
+        customer_id,
+        customer_name,
+        customer_type
+    FROM tblcustomers
+    WHERE customer_type = 'BANK'
+
+  sorted_retrieval: |
+    Example: "Show customers ordered by name"
+    SELECT 
+        customer_id,
+        customer_name,
+        customer_type
+    FROM tblcustomers
+    ORDER BY customer_name ASC
+
+# Template-specific validation rules
+validation_rules:
+  - "Query should reference only one primary table"
+  - "SELECT clause must use explicit column names"
+  - "WHERE conditions should be straightforward"
+  - "Avoid complex JOIN operations"
+  - "Use exact table and column names as provided"
+
+# Error prevention guidelines
+error_prevention:
+  common_mistakes:
+    - "Using SELECT * instead of explicit columns"
+    - "Adding unnecessary complexity to simple requests"
+    - "Modifying table or column names from schema"
+    - "Over-complicating basic filtering conditions"
+  
+  recommended_approach:
+    - "Start with basic SELECT column_list FROM table"
+    - "Add WHERE clauses for filtering requirements"
+    - "Include ORDER BY only when explicitly requested"
+    - "Keep query structure clean and readable"
+
+# Performance considerations for simple queries
+performance_hints:
+  indexing_awareness: "Consider which columns are likely indexed"
+  limit_usage: "Suggest LIMIT/TOP when dealing with large result sets"
+  column_selection: "Only select columns that are actually needed"
+
+# Business logic considerations
+business_logic:
+  financial_data_handling:
+    - "Treat financial amounts with appropriate precision"
+    - "Consider currency and decimal formatting"
+    - "Handle NULL values in financial calculations"
+  
+  date_handling:
+    - "Use appropriate date formatting for display"
+    - "Consider timezone implications"
+    - "Handle NULL dates gracefully"
+  
+  text_handling:
+    - "Consider case sensitivity in string comparisons"
+    - "Handle special characters appropriately"
+    - "Trim whitespace when necessary"
+
+# Context utilization guidelines
+context_usage:
+  schema_analysis:
+    - "Identify the most relevant table for the query"
+    - "Select appropriate columns based on user intent"
+    - "Use primary keys when available"
+    - "Consider column descriptions for relevance"
+  
+  user_intent_mapping:
+    - "Map natural language to specific columns"
+    - "Interpret filtering requirements clearly"
+    - "Understand sorting preferences"
+    - "Recognize when to limit results"
+
+# Template customization options
+customization:
+  result_limiting:
+    default_limit: null  # No limit by default
+    suggest_limit_for_large_tables: true
+    max_suggested_limit: 1000
+  
+  column_selection:
+    include_primary_keys: true
+    prioritize_named_columns: true
+    avoid_binary_columns: true
+  
+  formatting_preferences:
+    readable_structure: true
+    consistent_indentation: true
+    clear_line_breaks: true
+
+# Integration with other templates
+template_inheritance:
+  inherits_from: "base/system_context.yaml"
+  can_be_extended_by:
+    - "specializations/financial_domain.yaml"
+    - "specializations/xml_specific.yaml"
+  
+  override_behavior:
+    merge_instructions: true
+    replace_examples: false
+    extend_validation_rules: true

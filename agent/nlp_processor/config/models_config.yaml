@@ -1,0 +1,60 @@
+# AI Models Configuration - FAIL-FAST VERSION
+# No hardcoded fallbacks - environment variables required
+
+# AI Model Endpoints - MUST be set in environment variables
+endpoints:
+  mathstral:
+    url_env_var: "MATHSTRAL_ENDPOINT"  # Must be set in .env
+    enabled_env_var: "MATHSTRAL_ENABLED"
+    timeout: 30
+    max_retries: 3
+    model_type: "completion"
+    
+  deepseek:
+    url_env_var: "DEEPSEEK_ENDPOINT"   # Must be set in .env  
+    enabled_env_var: "DEEPSEEK_ENABLED"
+    timeout: 30
+    max_retries: 3
+    model_type: "chat"
+
+# Model Selection Strategy
+selection:
+  strategy: "fail_fast"  # Options: fail_fast, round_robin, priority
+  preferred_model: "mathstral"
+  fallback_enabled: false  # CRITICAL: No fallbacks in fail-fast mode
+  
+# Health Check Configuration
+health_checks:
+  interval_seconds: 60
+  timeout_seconds: 5
+  retry_attempts: 3
+  fail_fast_on_unhealthy: true  # System fails if models unhealthy
+
+# Request Configuration
+requests:
+  default_timeout: 30
+  max_concurrent: 5
+  retry_delay_seconds: 1.0
+  exponential_backoff: true
+
+# Monitoring
+monitoring:
+  track_response_times: true
+  track_error_rates: true
+  log_all_requests: false
+  log_failures: true
+
+# Error Handling - FAIL-FAST MODE
+error_handling:
+  fail_fast: true
+  no_fallback_responses: true
+  propagate_exceptions: true
+  log_errors: true
+
+# Required Environment Variables (for documentation)
+required_env_vars:
+  - MATHSTRAL_ENDPOINT
+  - DEEPSEEK_ENDPOINT
+  # Optional:
+  # - MATHSTRAL_ENABLED (defaults to "true")
+  # - DEEPSEEK_ENABLED (defaults to "true")

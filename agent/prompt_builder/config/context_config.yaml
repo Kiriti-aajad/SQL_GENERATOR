@@ -1,0 +1,381 @@
+# Enhanced Context Building Configuration with Intelligent Schema Integration
+# Integrates ConfigurableSchemaFilter + IntelligentRetrievalAgent capabilities
+# Supports dynamic entity detection and 60-80% table reduction benefits
+
+# Context building strategies
+context_strategies:
+  
+  # Table context formatting (enhanced with intelligence)
+  table_context:
+    format_template: "Table: {table_name}\nColumns: {column_list}\nDescription: {table_description}\n"
+    grouping: "by_table"
+    max_columns_per_table: 15
+    show_column_count: true
+    include_table_description: true
+    preserve_exact_names: true  # CRITICAL: Never modify table/column names
+    # NEW: Intelligent enhancements
+    show_priority_scores: true
+    show_entity_relevance: true
+    include_confidence_indicators: true
+    highlight_filtered_results: true
+    
+  # Column detail formatting (enhanced with intelligence)
+  column_context:
+    format_template: "{table}.{column} | {datatype} | {description}"
+    include_confidence: false
+    min_confidence: 0.7
+    max_description_length: 100
+    include_nullable_info: true
+    include_primary_key_info: true
+    preserve_exact_names: true  # CRITICAL: Never modify table/column names
+    # NEW: Intelligent enhancements
+    show_entity_markers: true
+    include_priority_indicators: true
+    highlight_key_columns: true
+    show_relevance_scores: true
+    
+  # Relationship context (enhanced with intelligence)
+  relationship_context:
+    format_template: "{source_table}.{source_column} -> {target_table}.{target_column}"
+    include_only_relevant: true
+    max_relationships: 20
+    group_by_table: true
+    show_relationship_type: false
+    preserve_exact_names: true  # CRITICAL: Never modify table/column names
+    # NEW: Intelligent enhancements
+    show_relationship_confidence: true
+    prioritize_by_relevance: true
+    include_join_hints: true
+    
+  # XML-specific context (enhanced with intelligence)
+  xml_context:
+    format_template: "XML Field: {table}.{xml_column}.{field}\nSQL Expression: {sql_expression}\nXPath: {xpath}\n"
+    include_xpath: true
+    include_sql_expression: true
+    max_xml_fields: 10
+    preserve_exact_names: true  # CRITICAL: Never modify table/column names
+    # NEW: Intelligent enhancements
+    show_xml_relevance: true
+    include_extraction_confidence: true
+    
+  # NEW: Intelligence summary context
+  intelligence_context:
+    format_template: "=== INTELLIGENT SCHEMA ANALYSIS ===\nEntities Detected: {detected_entities}\nTable Reduction: {table_reduction_summary}\nConfidence: {schema_confidence}\nReasoning Applied: {reasoning_applied}\n"
+    show_entity_detection: true
+    show_table_reduction_stats: true
+    show_confidence_scores: true
+    show_reasoning_metadata: true
+    include_performance_metrics: true
+
+# Enhanced context filtering and optimization
+filtering:
+  
+  # Confidence-based filtering (enhanced)
+  confidence_filters:
+    min_confidence: 0.7
+    always_include_top_n: 5  # Always include top N results regardless of confidence
+    boost_exact_matches: true
+    exact_match_boost: 0.2
+    # NEW: Intelligent filtering
+    use_intelligent_filtering: true
+    intelligent_confidence_threshold: 0.6
+    entity_based_confidence_boost: 0.3
+    table_priority_boost: 0.2
+    
+  # Content filtering (enhanced)
+  content_filters:
+    max_total_columns: 50
+    max_tables: 10
+    max_relationships: 20
+    max_xml_fields: 10
+    
+    # Relevance filtering
+    filter_low_relevance: true
+    relevance_threshold: 0.5
+    # NEW: Intelligent relevance
+    use_dynamic_relevance: true
+    entity_relevance_weight: 0.4
+    table_priority_weight: 0.3
+    schema_confidence_weight: 0.3
+    
+  # NEW: Intelligent schema filtering
+  intelligent_filtering:
+    enable_schema_intelligence: true
+    enable_reasoning: true
+    max_reasoning_iterations: 3
+    reasoning_timeout_seconds: 180
+    confidence_threshold: 0.7
+    
+    # Entity detection settings
+    entity_detection:
+      enable_dynamic_entity_detection: true
+      similarity_threshold: 0.3
+      min_entity_cluster_size: 2
+      entity_confidence_threshold: 0.5
+      
+    # Table reduction settings (your proven 60-80% reduction)
+    table_reduction:
+      enable_intelligent_reduction: true
+      target_reduction_percentage: 70  # Target 70% reduction
+      min_tables_to_keep: 3
+      max_tables_to_keep: 15
+      preserve_high_priority_tables: true
+      
+  # Name preservation validation (kept as-is)
+  name_preservation:
+    validate_all_names: true
+    case_sensitive: true
+    preserve_special_chars: true
+    no_transformation_allowed: true
+
+# Enhanced context section assembly
+assembly:
+  
+  # Section ordering (enhanced with intelligence)
+  section_order:
+    - intelligence  # NEW: Intelligence summary first
+    - tables
+    - columns  
+    - relationships
+    - xml_mappings
+    - examples
+    
+  # Section separators
+  separators:
+    between_sections: "\n\n"
+    within_section: "\n"
+    table_separator: "\n"
+    # NEW: Intelligence section separators
+    intelligence_separator: "\n"
+    entity_separator: " | "
+    
+  # Enhanced length management with database protection
+  length_management:
+    max_total_context_length: 2000
+    truncation_strategy: "intelligent_relevance"  # NEW: Intelligent strategy
+    preserve_high_priority: true
+    # NEW: Critical element protection
+    protect_critical_database_elements: true
+    never_trim_tables: true
+    never_trim_joins: true
+    never_trim_xml_mappings: true
+    never_trim_primary_keys: true
+    
+    # Enhanced truncation priorities (higher = less likely to be truncated)
+    truncation_priorities:
+      intelligence: 15      # NEW: Highest priority for intelligence summary
+      tables: 12           # INCREASED: Critical database info
+      relationships: 11    # INCREASED: Critical join info
+      xml_mappings: 10     # INCREASED: Critical XML info
+      columns: 9
+      examples: 3          # Lowest priority
+
+# Enhanced schema information extraction
+extraction:
+  
+  # Enhanced table information extraction
+  table_extraction:
+    group_columns_by_table: true
+    include_column_statistics: false
+    calculate_table_relevance: true
+    # NEW: Intelligent extraction
+    use_intelligent_table_selection: true
+    apply_entity_based_filtering: true
+    include_priority_scores: true
+    
+  # Enhanced column information extraction  
+  column_extraction:
+    include_datatype: true
+    include_description: true
+    include_constraints: true
+    include_default_values: false
+    format_datatype: true
+    # NEW: Intelligent column selection
+    use_entity_relevance_scoring: true
+    include_confidence_scores: true
+    prioritize_key_columns: true
+    
+  # Enhanced relationship extraction
+  relationship_extraction:
+    extract_foreign_keys: true
+    extract_primary_keys: true
+    infer_relationships: false
+    include_relationship_strength: false
+    # NEW: Intelligent relationship discovery
+    use_intelligent_join_detection: true
+    confidence_based_relationship_scoring: true
+    
+  # Enhanced XML extraction
+  xml_extraction:
+    extract_xpath: true
+    extract_sql_expression: true
+    include_xml_schema: false
+    validate_xml_paths: false
+    # NEW: Intelligent XML processing
+    use_entity_based_xml_selection: true
+    xml_relevance_scoring: true
+
+# NEW: Intelligent schema integration settings
+intelligent_schema:
+  
+  # FilteredIntelligentRetrievalAgent integration
+  retrieval_agent:
+    enable_intelligent_retrieval: true
+    filter_config_path: null  # Auto-detect or specify path
+    enable_reasoning_by_default: true
+    max_reasoning_iterations: 3
+    confidence_threshold: 0.7
+    reasoning_timeout: 180
+    
+  # Dynamic query analysis
+  query_analysis:
+    enable_dynamic_entity_detection: true
+    enable_semantic_similarity: true
+    similarity_threshold: 0.3
+    enable_schema_pattern_learning: true
+    cache_analysis_results: true
+    
+  # Schema intelligence
+  schema_intelligence:
+    enable_table_prioritization: true
+    enable_confidence_scoring: true
+    enable_entity_mapping: true
+    enable_relationship_discovery: true
+    
+    # Performance settings
+    processing_timeout: 300
+    enable_parallel_processing: false
+    cache_intelligent_results: true
+    cache_ttl_seconds: 600
+
+# Enhanced quality assurance
+quality_assurance:
+  
+  # Name preservation checks (kept as-is)
+  name_preservation_checks:
+    validate_table_names: true
+    validate_column_names: true
+    validate_case_preservation: true
+    fail_on_name_change: true
+    
+  # Enhanced content validation
+  content_validation:
+    check_for_empty_sections: true
+    validate_format_templates: true
+    ensure_minimum_context: true
+    min_tables: 1
+    min_columns: 1
+    # NEW: Intelligence validation
+    validate_intelligent_results: true
+    check_entity_detection_quality: true
+    validate_table_reduction_results: true
+    
+  # Enhanced consistency checks
+  consistency_checks:
+    check_table_column_consistency: true
+    validate_relationship_references: true
+    ensure_xml_field_completeness: true
+    # NEW: Intelligence consistency
+    validate_entity_table_mapping: true
+    check_priority_score_consistency: true
+    validate_confidence_score_ranges: true
+    
+  # NEW: Critical element protection validation
+  critical_element_protection:
+    validate_all_tables_preserved: true
+    validate_all_joins_preserved: true
+    validate_all_xml_mappings_preserved: true
+    validate_primary_keys_preserved: true
+    fail_on_critical_element_loss: true
+
+# Enhanced performance optimization
+performance:
+  
+  # Enhanced caching
+  caching:
+    cache_formatted_context: true
+    cache_extracted_info: true
+    cache_ttl_seconds: 300
+    # NEW: Intelligence caching
+    cache_intelligent_retrieval_results: true
+    cache_entity_detection_results: true
+    cache_table_priority_scores: true
+    intelligent_cache_ttl_seconds: 900  # Longer TTL for expensive operations
+    
+  # Enhanced processing optimization
+  processing:
+    parallel_processing: false
+    batch_size: 100
+    lazy_loading: true
+    # NEW: Intelligent processing
+    enable_intelligent_processing_optimization: true
+    skip_reasoning_for_simple_queries: true
+    use_cached_entity_patterns: true
+    
+  # Enhanced memory management
+  memory:
+    max_context_cache_size: 100
+    cleanup_interval_seconds: 600
+    memory_threshold_mb: 100
+    # NEW: Intelligence memory management
+    max_intelligent_results_cache: 50
+    intelligent_cache_cleanup_interval: 1200
+    entity_pattern_cache_size: 200
+
+# NEW: Integration compatibility settings
+integration:
+  
+  # Backward compatibility
+  backward_compatibility:
+    support_legacy_context_builder: true
+    support_legacy_query_analyzer: true
+    fallback_to_traditional_on_failure: true
+    
+  # Feature toggles
+  feature_toggles:
+    enable_all_intelligent_features: true
+    enable_entity_detection: true
+    enable_table_reduction: true
+    enable_confidence_scoring: true
+    enable_reasoning: true
+    enable_database_element_protection: true
+    
+  # Debugging and monitoring
+  debugging:
+    log_intelligent_processing: true
+    log_entity_detection_results: true
+    log_table_reduction_results: true
+    log_optimization_stats: true
+    enable_performance_tracking: true
+    
+    # Log levels
+    intelligent_log_level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+    performance_log_level: "INFO"
+
+# NEW: Optimization strategies
+optimization_strategies:
+  
+  # Context optimization strategies
+  context_optimization:
+    default_strategy: "intelligent_schema"  # intelligent_schema, entity_aware, table_priority, traditional
+    strategy_selection_criteria:
+      use_intelligent_when_available: true
+      fallback_strategy: "entity_aware"
+      min_intelligence_confidence: 0.6
+      
+  # Database element protection strategies  
+  database_protection:
+    protection_level: "strict"  # strict, moderate, minimal
+    critical_elements:
+      - "table_names"
+      - "column_names" 
+      - "join_relationships"
+      - "xml_mappings"
+      - "primary_keys"
+      - "foreign_keys"
+    
+    # Emergency handling
+    emergency_handling:
+      preserve_critical_over_length_limits: true
+      log_protection_violations: true
+      fail_on_critical_loss: true

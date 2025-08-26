@@ -1,0 +1,243 @@
+# XML Extraction Query Template
+# Specialized template for queries requiring XML data extraction
+
+query_type: "xml_extraction"
+description: "Template for queries extracting data from XML columns using XPath expressions"
+priority: 3
+
+# System context additions specific to XML extraction
+system_additions:
+  xml_focus: "Prioritize XML data extraction using provided SQL expressions and XPath"
+  xpath_requirement: "Use EXACT XPath expressions provided in schema - do not modify"
+  sql_expression_usage: "Use provided SQL extraction expressions without alteration"
+  null_handling: "Consider XML NULL values and missing elements appropriately"
+
+# Instruction additions for XML extraction queries
+instruction_additions: |
+  XML EXTRACTION GUIDANCE:
+  - Use the SQL expressions provided in the XML mappings exactly as specified
+  - Do not create your own XML extraction logic or XPath expressions
+  - Handle potential NULL XML values and missing elements
+  - Use appropriate data type casting for extracted values
+  - Consider XML structure validation when necessary
+  - Use the .exist() method to check for element existence before extraction
+  - Apply proper NULL handling for missing XML elements
+
+# XML-specific construction patterns
+construction_patterns:
+  xml_extraction:
+    use_provided_expressions: true
+    validate_element_existence: true
+    handle_null_values: true
+    cast_data_types: true
+    
+  xpath_usage:
+    exact_expressions_only: true
+    no_custom_xpath_creation: true
+    validate_xpath_syntax: false  # Trust provided XPath
+    
+  sql_method_patterns:
+    use_value_method: true
+    use_exist_method: true
+    use_query_method: false  # Unless specifically needed
+    use_nodes_method: false  # Unless specifically needed
+
+# XML extraction examples
+examples:
+  basic_xml_extraction: |
+    Example: "Get customer email addresses from contact XML"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        c.contact_xml.value('(/ContactInfo/Email)[1]', 'VARCHAR(255)') as email_address
+    FROM tblcustomers c
+    WHERE c.contact_xml.exist('/ContactInfo/Email') = 1
+
+  multiple_xml_fields: |
+    Example: "Get customer contact details from XML"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        c.contact_xml.value('(/ContactInfo/Email)[1]', 'VARCHAR(255)') as email,
+        c.contact_xml.value('(/ContactInfo/Phone)[1]', 'VARCHAR(50)') as phone,
+        c.contact_xml.value('(/ContactInfo/Address)[1]', 'VARCHAR(500)') as address
+    FROM tblcustomers c
+    WHERE c.contact_xml.exist('/ContactInfo') = 1
+
+  xml_with_conditions: |
+    Example: "Get customers with email addresses in XML"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        c.contact_xml.value('(/ContactInfo/Email)[1]', 'VARCHAR(255)') as email_address
+    FROM tblcustomers c
+    WHERE c.contact_xml.exist('/ContactInfo/Email') = 1
+        AND c.customer_type = 'ACTIVE'
+
+  xml_join_example: |
+    Example: "Get customer orders with contact email from XML"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        c.contact_xml.value('(/ContactInfo/Email)[1]', 'VARCHAR(255)') as email,
+        o.order_id,
+        o.order_date
+    FROM tblcustomers c
+    INNER JOIN tblorders o ON c.customer_id = o.customer_id
+    WHERE c.contact_xml.exist('/ContactInfo/Email') = 1
+
+# XML-specific validation rules
+validation_rules:
+  - "Use XML SQL expressions exactly as provided in schema context"
+  - "Do not create custom XPath expressions or modify provided ones"
+  - "Include existence checks using .exist() method before extraction"
+  - "Use appropriate data type casting for extracted XML values"
+  - "Handle NULL XML columns and missing elements appropriately"
+  - "Qualify XML column references with proper table aliases"
+  - "Use exact table and column names as provided"
+
+# XML error prevention
+error_prevention:
+  common_xml_mistakes:
+    - "Creating custom XPath expressions instead of using provided ones"
+    - "Extracting XML values without checking element existence"
+    - "Incorrect data type casting for extracted values"
+    - "Not handling NULL XML columns appropriately"
+    - "Modifying provided SQL extraction expressions"
+    - "Using wrong XML methods (query instead of value)"
+    
+  prevention_strategies:
+    - "Always use provided SQL expressions from schema context"
+    - "Check element existence before extraction"
+    - "Cast extracted values to appropriate data types"
+    - "Handle XML NULLs with WHERE clauses or COALESCE"
+    - "Test XML expressions for element existence"
+
+# XML method usage guidelines
+xml_method_guidelines:
+  value_method:
+    purpose: "Extract single scalar values from XML"
+    syntax: "xml_column.value('xpath', 'datatype')"
+    use_cases: ["Single email", "Single phone number", "Specific attribute"]
+    
+  exist_method:
+    purpose: "Check if XML element or attribute exists"
+    syntax: "xml_column.exist('xpath') = 1"
+    use_cases: ["Filtering records", "Conditional logic", "NULL checking"]
+    
+  query_method:
+    purpose: "Extract XML fragments or multiple values"
+    syntax: "xml_column.query('xpath')"
+    use_cases: ["Multiple elements", "Complex XML structures"]
+    caution: "Use only when specifically needed"
+    
+  nodes_method:
+    purpose: "Split XML into multiple rows"
+    syntax: "xml_column.nodes('xpath') as T(c)"
+    use_cases: ["XML arrays", "Repeated elements"]
+    caution: "Advanced usage - use carefully"
+
+# Data type handling for XML
+xml_data_types:
+  string_extraction:
+    target_types: ["VARCHAR", "NVARCHAR", "TEXT"]
+    considerations: ["Length limits", "Unicode support", "Trimming"]
+    
+  numeric_extraction:
+    target_types: ["INT", "DECIMAL", "FLOAT"]
+    considerations: ["Null handling", "Validation", "Precision"]
+    
+  date_extraction:
+    target_types: ["DATETIME", "DATE", "DATETIME2"]
+    considerations: ["Format validation", "Timezone", "NULL dates"]
+    
+  boolean_extraction:
+    target_types: ["BIT", "VARCHAR"]
+    considerations: ["True/false representation", "Case sensitivity"]
+
+# Performance considerations for XML
+xml_performance:
+  indexing_considerations:
+    - "XML indexes can improve XPath query performance"
+    - "Consider selective XML indexes for frequently queried paths"
+    - "Standard relational indexes don't help XML queries"
+    
+  query_optimization:
+    - "Use exist() method for filtering before extraction"
+    - "Minimize XML method calls in WHERE clauses"
+    - "Consider extracting XML data into relational columns"
+    - "Batch XML extractions when possible"
+    
+  best_practices:
+    - "Check element existence before extraction"
+    - "Use appropriate data type casting"
+    - "Avoid complex XPath expressions in WHERE clauses"
+    - "Consider XML schema validation"
+
+# Business logic for XML in financial domain
+financial_xml_scenarios:
+  counterparty_contacts:
+    description: "Extract contact information from counterparty XML"
+    common_paths: ["/ContactInfo/Email", "/ContactInfo/Phone", "/ContactInfo/Address"]
+    validation_requirements: ["Email format", "Phone format", "Required fields"]
+    
+  trade_details:
+    description: "Extract trade-specific details from XML"
+    common_paths: ["/TradeDetails/Instrument", "/TradeDetails/Quantity", "/TradeDetails/Price"]
+    validation_requirements: ["Numeric validation", "Currency handling", "Date formats"]
+    
+  risk_parameters:
+    description: "Extract risk calculation parameters from XML"
+    common_paths: ["/RiskParams/VaR", "/RiskParams/Exposure", "/RiskParams/Rating"]
+    validation_requirements: ["Numeric precision", "NULL handling", "Business rules"]
+
+# Template customization for XML
+customization:
+  null_handling_strategy:
+    default_approach: "exclude_nulls"
+    options:
+      exclude_nulls: "Use WHERE xml_column.exist('xpath') = 1"
+      include_nulls: "Use COALESCE or ISNULL with extracted values"
+      mark_nulls: "Use CASE statements to mark missing values"
+      
+  extraction_approach:
+    single_value: "Use .value() method with [1] indexer"
+    multiple_values: "Consider .query() or .nodes() methods"
+    conditional_extraction: "Use .exist() for conditional logic"
+    
+  data_validation:
+    validate_format: true
+    check_business_rules: true
+    handle_invalid_data: "gracefully"
+
+# Integration with other query types
+integration_patterns:
+  xml_with_joins:
+    description: "Combine XML extraction with table joins"
+    considerations: ["Performance impact", "NULL handling", "Index usage"]
+    
+  xml_with_aggregation:
+    description: "Aggregate extracted XML values"
+    considerations: ["GROUP BY with XML", "NULL value handling", "Performance"]
+    
+  xml_with_filtering:
+    description: "Filter based on XML content"
+    considerations: ["Use exist() for filtering", "Avoid complex XPath in WHERE"]
+
+# Template inheritance
+template_inheritance:
+  inherits_from: "base/system_context.yaml"
+  extends_base_with:
+    - "XML extraction methodology"
+    - "XPath usage guidelines"
+    - "SQL XML method usage"
+    - "Performance considerations"
+  
+  compatible_specializations:
+    - "specializations/financial_domain.yaml"
+    - "specializations/xml_specific.yaml"
+  
+  override_behavior:
+    merge_with_base: true
+    priority_over_simple_queries: true
+    xml_specific_validation: true

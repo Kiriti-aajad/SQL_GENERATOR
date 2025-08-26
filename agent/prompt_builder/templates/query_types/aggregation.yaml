@@ -1,0 +1,274 @@
+# Aggregation Query Template
+# Specialized template for queries requiring aggregate functions and GROUP BY operations
+
+query_type: "aggregation"
+description: "Template for queries using COUNT, SUM, AVG, MAX, MIN and GROUP BY operations"
+priority: 2
+
+# System context additions specific to aggregation
+system_additions:
+  aggregation_focus: "Focus on proper use of aggregate functions with appropriate grouping"
+  grouping_requirements: "Use GROUP BY for all non-aggregate columns in SELECT"
+  having_usage: "Use HAVING clause for filtering aggregate results"
+  null_consideration: "Consider NULL value handling in aggregate calculations"
+
+# Instruction additions for aggregation queries
+instruction_additions: |
+  AGGREGATION QUERY GUIDANCE:
+  - Use appropriate aggregate functions (COUNT, SUM, AVG, MAX, MIN)
+  - Include GROUP BY clause for all non-aggregate columns in SELECT
+  - Use HAVING clause to filter aggregate results, not WHERE
+  - Consider NULL value handling in calculations
+  - Use meaningful column aliases for aggregate results
+  - Ensure proper data types for aggregate operations
+  - Consider performance implications of grouping operations
+
+# Aggregation-specific construction patterns
+construction_patterns:
+  aggregate_functions:
+    count_usage: "COUNT(*) for row counts, COUNT(column) for non-null counts"
+    sum_usage: "Use SUM for numeric totals, consider NULL handling"
+    avg_usage: "Use AVG for averages, be aware of NULL exclusion"
+    max_min_usage: "Use for finding extremes, works with dates and text"
+    
+  grouping_strategy:
+    include_all_non_aggregates: true
+    logical_grouping_order: true
+    consider_performance: true
+    
+  having_vs_where:
+    where_for_row_filtering: true
+    having_for_aggregate_filtering: true
+    combine_when_needed: true
+
+# Aggregation examples
+examples:
+  basic_count: |
+    Example: "Count customers by type"
+    SELECT 
+        customer_type,
+        COUNT(*) as customer_count
+    FROM tblcustomers
+    GROUP BY customer_type
+
+  sum_with_grouping: |
+    Example: "Total order amount by customer"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        SUM(o.order_amount) as total_orders
+    FROM tblcustomers c
+    INNER JOIN tblorders o ON c.customer_id = o.customer_id
+    GROUP BY c.customer_id, c.customer_name
+
+  multiple_aggregates: |
+    Example: "Customer order statistics"
+    SELECT 
+        c.customer_type,
+        COUNT(*) as customer_count,
+        AVG(o.order_amount) as avg_order_amount,
+        MAX(o.order_amount) as max_order_amount,
+        MIN(o.order_date) as first_order_date
+    FROM tblcustomers c
+    INNER JOIN tblorders o ON c.customer_id = o.customer_id
+    GROUP BY c.customer_type
+
+  having_clause_example: |
+    Example: "Customers with more than 5 orders"
+    SELECT 
+        c.customer_id,
+        c.customer_name,
+        COUNT(o.order_id) as order_count
+    FROM tblcustomers c
+    INNER JOIN tblorders o ON c.customer_id = o.customer_id
+    GROUP BY c.customer_id, c.customer_name
+    HAVING COUNT(o.order_id) > 5
+
+  date_based_aggregation: |
+    Example: "Monthly order totals for current year"
+    SELECT 
+        YEAR(order_date) as order_year,
+        MONTH(order_date) as order_month,
+        COUNT(*) as order_count,
+        SUM(order_amount) as total_amount
+    FROM tblorders
+    WHERE YEAR(order_date) = YEAR(GETDATE())
+    GROUP BY YEAR(order_date), MONTH(order_date)
+    ORDER BY order_year, order_month
+
+# Aggregation-specific validation rules
+validation_rules:
+  - "All non-aggregate columns in SELECT must appear in GROUP BY"
+  - "Use HAVING clause for filtering aggregate results, not WHERE"
+  - "Include meaningful aliases for aggregate columns"
+  - "Consider NULL handling in aggregate calculations"
+  - "Ensure aggregate functions are used with compatible data types"
+  - "Use appropriate aggregate functions for the data being summarized"
+  - "Order aggregate results logically when using ORDER BY"
+
+# Common aggregation mistakes and prevention
+error_prevention:
+  common_aggregation_mistakes:
+    - "Selecting non-aggregate columns without including in GROUP BY"
+    - "Using WHERE clause to filter aggregate results instead of HAVING"
+    - "Not handling NULL values appropriately in calculations"
+    - "Using incorrect aggregate functions for data types"
+    - "Poor column aliasing for aggregate results"
+    - "Inefficient grouping that impacts performance"
+    
+  prevention_strategies:
+    - "Always include non-aggregate SELECT columns in GROUP BY"
+    - "Use HAVING for aggregate filtering, WHERE for row filtering"
+    - "Consider COALESCE or ISNULL for NULL handling in aggregates"
+    - "Choose appropriate aggregate functions for data types"
+    - "Use descriptive aliases for calculated columns"
+    - "Consider index usage for GROUP BY columns"
+
+# Aggregate function guidelines
+aggregate_function_guidelines:
+  count_function:
+    count_star: "COUNT(*) - counts all rows including NULLs"
+    count_column: "COUNT(column) - counts non-NULL values only"
+    count_distinct: "COUNT(DISTINCT column) - counts unique non-NULL values"
+    use_cases: ["Row counting", "Non-NULL value counting", "Unique value counting"]
+    
+  sum_function:
+    basic_usage: "SUM(numeric_column) - adds all non-NULL values"
+    null_handling: "Returns NULL if all values are NULL"
+    data_types: "Works with numeric data types"
+    use_cases: ["Financial totals", "Quantity summation", "Numeric aggregation"]
+    
+  avg_function:
+    calculation: "AVG(numeric_column) - arithmetic mean of non-NULL values"
+    null_exclusion: "NULL values are excluded from calculation"
+    precision: "Result precision depends on input data type"
+    use_cases: ["Average calculations", "Statistical analysis", "Performance metrics"]
+    
+  max_min_functions:
+    max_usage: "MAX(column) - finds largest non-NULL value"
+    min_usage: "MIN(column) - finds smallest non-NULL value"
+    data_types: "Works with numeric, date, and string data types"
+    use_cases: ["Range finding", "Date extremes", "Alphabetical ordering"]
+
+# Advanced aggregation patterns
+advanced_patterns:
+  conditional_aggregation:
+    description: "Use CASE statements within aggregate functions"
+    example: "SUM(CASE WHEN status = 'ACTIVE' THEN amount ELSE 0 END)"
+    use_cases: ["Conditional totals", "Status-based counting", "Filtered aggregation"]
+    
+  window_functions:
+    description: "Use window functions for running totals and rankings"
+    caution: "Advanced feature - use when specifically needed"
+    examples: ["ROW_NUMBER()", "RANK()", "SUM() OVER()"]
+    
+  multiple_grouping_levels:
+    description: "GROUP BY multiple columns for hierarchical aggregation"
+    considerations: ["Grouping order", "Performance impact", "Result interpretation"]
+    example: "GROUP BY region, customer_type, order_date"
+    
+  rollup_cube_operations:
+    description: "Use ROLLUP or CUBE for subtotals and grand totals"
+    complexity: "Advanced aggregation - use carefully"
+    use_cases: ["Subtotal reports", "Cross-tabulation", "Summary analysis"]
+
+# Performance considerations for aggregation
+aggregation_performance:
+  indexing_strategies:
+    - "Create indexes on GROUP BY columns"
+    - "Consider covering indexes for SELECT and GROUP BY columns"
+    - "Composite indexes for multiple GROUP BY columns"
+    
+  query_optimization:
+    - "Filter rows with WHERE before grouping when possible"
+    - "Use appropriate data types for aggregate calculations"
+    - "Consider partitioning for large aggregation queries"
+    - "Avoid unnecessary columns in GROUP BY"
+    
+  memory_considerations:
+    - "Large GROUP BY operations can consume significant memory"
+    - "Consider breaking down complex aggregations into steps"
+    - "Use appropriate SORT_IN_TEMPDB settings for large sorts"
+
+# Business logic for financial aggregation
+financial_aggregation_scenarios:
+  position_aggregation:
+    description: "Aggregate positions by counterparty, instrument, or date"
+    considerations: ["Currency handling", "Position dates", "Active vs historical"]
+    common_aggregates: ["SUM(position_amount)", "COUNT(position_id)", "AVG(market_value)"]
+    
+  risk_calculations:
+    description: "Aggregate risk metrics across portfolios or counterparties"
+    considerations: ["Risk measure types", "Calculation dates", "Currency conversion"]
+    common_aggregates: ["SUM(var_amount)", "MAX(exposure_amount)", "AVG(risk_rating)"]
+    
+  trade_analysis:
+    description: "Aggregate trade volumes, counts, and values"
+    considerations: ["Trade dates", "Settlement status", "Currency normalization"]
+    common_aggregates: ["COUNT(trade_id)", "SUM(notional_amount)", "AVG(trade_price)"]
+
+# NULL handling strategies
+null_handling:
+  aggregate_behavior:
+    count_star: "Includes rows with NULL values"
+    count_column: "Excludes NULL values"
+    sum_avg_max_min: "Ignores NULL values in calculations"
+    
+  explicit_null_handling:
+    coalesce_usage: "COALESCE(column, 0) to treat NULL as zero"
+    isnull_usage: "ISNULL(column, default_value) for SQL Server"
+    case_statements: "CASE WHEN column IS NULL THEN 0 ELSE column END"
+    
+  business_considerations:
+    - "Decide whether NULL means zero or should be excluded"
+    - "Consider impact on averages and counts"
+    - "Document NULL handling decisions"
+
+# Template customization
+customization:
+  default_aggregates:
+    count_preference: "COUNT(*) unless specifically counting non-NULL values"
+    sum_null_handling: "Include COALESCE when business logic requires"
+    avg_precision: "Consider CAST for decimal precision"
+    
+  grouping_preferences:
+    logical_order: "Group by hierarchical levels (region, then customer, etc.)"
+    performance_order: "Consider index usage in grouping order"
+    readability: "Use meaningful column order in GROUP BY"
+    
+  result_formatting:
+    column_aliases: "Use descriptive aliases for aggregate columns"
+    ordering: "Include ORDER BY for consistent results"
+    limiting: "Consider TOP or LIMIT for large result sets"
+
+# Integration with other query types
+integration_patterns:
+  aggregation_with_joins:
+    description: "Combine aggregation with table joins"
+    considerations: ["JOIN before GROUP BY", "Avoid duplicate counting", "Performance impact"]
+    
+  aggregation_with_xml:
+    description: "Aggregate extracted XML values"
+    considerations: ["NULL XML handling", "Data type casting", "Performance"]
+    
+  subquery_aggregation:
+    description: "Use aggregated results in subqueries"
+    considerations: ["Correlated vs non-correlated subqueries", "Performance implications"]
+
+# Template inheritance
+template_inheritance:
+  inherits_from: "base/system_context.yaml"
+  extends_base_with:
+    - "Aggregate function usage"
+    - "GROUP BY requirements"
+    - "HAVING clause usage"
+    - "NULL handling in aggregation"
+  
+  compatible_specializations:
+    - "specializations/financial_domain.yaml"
+    - "query_types/join_query.yaml"  # Often combined
+  
+  override_behavior:
+    merge_with_base: true
+    priority_over_simple_queries: true
+    aggregate_specific_validation: true

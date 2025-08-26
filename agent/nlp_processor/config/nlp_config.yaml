@@ -1,0 +1,77 @@
+# NLP Processor Configuration - Complete Default Configuration
+# This provides all required sections for your fail-fast NLP orchestrator
+
+data_sources:
+  metadata_path: "data/metadata"
+  schema_file: "schema.json"
+  joins_file: "joins_verified.json"
+  xml_schema_file: "xml_schema.json"
+  tables_file: "tables.json"
+
+processing:
+  max_query_length: 500
+  timeout_seconds: 30
+  enable_caching: true
+  performance_target_seconds: 5
+
+understanding:
+  intent_threshold: 0.7
+  entity_threshold: 0.6
+  enable_fuzzy_matching: true
+  temporal_patterns:
+    - "last \\d+ days"
+    - "recent"
+    - "within \\d+ \\w+"
+
+business_intelligence:
+  auto_complete_context: true
+  resolve_codes_to_names: true
+  add_temporal_context: true
+  banking_domain:
+    counterparty_context: "always_include_contact_address"
+    application_context: "include_workflow_status"
+    region_context: "resolve_to_readable_names"
+    xml_field_priority: "high"
+
+schema_integration:
+  use_verified_joins: true
+  join_confidence_threshold: 80
+  prefer_high_relevance_tables: true
+  xml_fields_enabled: true
+  physical_columns_priority: "equal"
+
+aggregation:
+  default_aggregations: ["SUM", "AVG", "MAX", "COUNT"]
+  numerical_fields_auto_aggregate: true
+  group_by_auto_suggest: true
+  temporal_aggregation_enabled: true
+
+analyst_patterns:
+  temporal_analysis:
+    patterns: ["last \\d+ days", "recent", "within"]
+    default_columns: ["created_date", "application_date"]
+    auto_ordering: true
+  regional_analysis:
+    patterns: ["region", "state", "location", "geographic"]
+    default_grouping: "StateAddress"
+    resolve_codes: true
+  aggregation_analysis:
+    patterns: ["sum", "total", "average", "maximum", "count"]
+    auto_group_by: true
+    include_context: true
+
+integration:
+  schema_searcher_timeout: 10
+  xml_manager_enabled: true
+  maintain_performance: true
+  bridge_retry_attempts: 3
+
+monitoring:
+  enable_performance_tracking: true
+  enable_accuracy_tracking: true
+  log_level: "INFO"
+
+nlp_processor:
+  enabled: true
+  timeout: 30
+  max_retries: 3

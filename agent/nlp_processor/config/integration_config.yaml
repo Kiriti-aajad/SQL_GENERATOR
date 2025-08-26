@@ -1,0 +1,137 @@
+# System Integration Configuration - FAIL-FAST VERSION
+# Defines how components integrate with each other
+
+# Component Integration Points
+components:
+  async_client_manager:
+    enabled: true
+    initialization_required: true
+    health_check_required: true
+    fail_fast_on_error: true
+    
+  nlp_orchestrator:
+    enabled: true
+    depends_on: ["async_client_manager", "pipeline"]
+    initialization_required: true
+    fail_fast_on_error: true
+    
+  pipeline:
+    enabled: true
+    depends_on: ["metadata_loader"]
+    initialization_required: true
+    fail_fast_on_error: true
+    
+  schema_searcher:
+    enabled: true
+    depends_on: ["metadata_loader"]
+    initialization_required: false
+    fail_fast_on_error: false
+
+# Database Integration
+database:
+  connection_required: true
+  metadata_integration: true
+  fail_fast_on_connection_error: true
+  
+# API Integration
+api:
+  endpoints:
+    health_check: "/health"
+    query_processing: "/api/v1/query"
+    status: "/status"
+  
+  cors:
+    enabled: true
+    allowed_origins: ["http://localhost:3000", "http://localhost:8080"]
+    allowed_methods: ["GET", "POST", "OPTIONS"]
+    allowed_headers: ["Content-Type", "Authorization"]
+  
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+    burst_size: 10
+
+# Service Dependencies - FAIL-FAST VALIDATION
+dependencies:
+  critical:  # System fails if these are unavailable
+    - metadata_loader
+    - async_client_manager
+    - ai_models
+    
+  optional:  # System warns but continues if these are unavailable
+    - caching_service
+    - metrics_collector
+
+# Environment Validation
+environment:
+  required_vars:
+    - MATHSTRAL_ENDPOINT
+    - DEEPSEEK_ENDPOINT
+  
+  optional_vars:
+    - MATHSTRAL_ENABLED
+    - DEEPSEEK_ENABLED
+    - ASYNC_CLIENT_HEALTH_INTERVAL
+    - ASYNC_CLIENT_RETRIES
+    - ASYNC_CLIENT_TIMEOUT
+  
+  fail_fast_on_missing_required: true
+
+# Monitoring Integration
+monitoring:
+  health_checks:
+    enabled: true
+    interval_seconds: 30
+    components_to_check:
+      - async_client_manager
+      - nlp_orchestrator  
+      - pipeline
+      - database_connection
+      - ai_models
+  
+  metrics:
+    enabled: true
+    export_prometheus: true
+    track_component_health: true
+    track_response_times: true
+    track_error_rates: true
+
+# Error Propagation - FAIL-FAST STRATEGY
+error_handling:
+  strategy: "fail_fast"
+  propagate_exceptions: true
+  no_silent_failures: true
+  log_all_errors: true
+  
+  critical_error_actions:
+    - log_error
+    - notify_admin
+    - shutdown_gracefully
+    
+  non_critical_error_actions:
+    - log_warning
+    - continue_operation
+
+# Startup Sequence - STRICT VALIDATION
+startup:
+  validation_order:
+    1: "environment_variables"
+    2: "database_connection"  
+    3: "metadata_loading"
+    4: "ai_model_connectivity"
+    5: "component_initialization"
+    6: "health_check_validation"
+  
+  fail_fast_on_step_failure: true
+  timeout_per_step_seconds: 30
+
+# Shutdown Configuration
+shutdown:
+  graceful_timeout_seconds: 10
+  force_shutdown_timeout_seconds: 30
+  cleanup_order:
+    1: "stop_accepting_requests"
+    2: "finish_pending_requests"
+    3: "cleanup_ai_clients"
+    4: "close_database_connections"
+    5: "shutdown_components"

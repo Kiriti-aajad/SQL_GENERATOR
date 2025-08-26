@@ -1,0 +1,305 @@
+# Environment Files
+.env
+*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+agent/.env
+server/.env
+orchestrator/.env
+
+# IDE and Editor Files
+/.vscode/
+.vscode/
+*.swp
+*.swo
+*~
+.idea/
+*.sublime-*
+
+# Python Cache and Compiled Files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Cache Directories
+/.cache/
+.cache/
+**/.cache/
+*.cache
+.pytest_cache/
+**/.pytest_cache/
+.coverage
+.nyc_output
+
+# ML Model Cache and Downloads
+.cache/sentence_transformers/
+.cache/transformers/
+.cache/huggingface/
+.cache/torch/
+**/.cache/huggingface/
+**/.cache/sentence_transformers/
+*.model
+*.bin
+*.safetensors
+*.onnx
+model_cache/
+models/
+snapshots/
+blobs/
+
+# Data Directories and Database Files
+/data/
+data/embeddings/
+data/embeddings/chromaDB/
+data/embeddings/faiss/
+data/join_graph/
+data/metadata/
+data/models/
+data/cache/
+data/temp/
+*.db
+*.sqlite
+*.sqlite3
+*.h5
+*.hdf5
+*.gpickle
+*.pkl
+*.pickle
+*.joblib
+
+# Vector Store and Index Files
+*.faiss
+*_backup_*.faiss
+faiss_*
+chromadb/
+chroma.sqlite3
+vector_store/
+embeddings/
+index.faiss
+metadata.pkl
+
+# Output and Results Files
+/output/
+output/
+results/
+exports/
+*.xlsx
+*.xls
+*.ods
+*.csv
+reports/
+*_results_*.json
+*_output_*.json
+*_test_results_*.json
+*Complete_Input_Output_Report_*.xlsx
+*Complete_Input_Output_Report_*.ods
+*Query_Results_*.xlsx
+*Schema_Export_*.xlsx
+*SchemaEngine_QueryResults_*.ods
+working_sql_results.json
+fixed_sql_results.json
+improved_join_results.json
+
+# Keep certain important JSON files (exceptions to above rules)
+!**/fixtures/*.json
+!**/config/*.json
+!**/templates/*.json
+!**/config/**/*.json
+!**/domain_knowledge/mappings/*.json
+!**/training/data/*.json
+
+# Test Coverage and Results
+/tests/.pytest_cache/
+tests/.pytest_cache/
+.coverage
+.pytest_cache/
+htmlcov/
+.tox/
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+.coverage.*
+lastfailed
+nodeids
+stepwise
+tests
+# Logs and Performance Files
+*.log
+*.log.*
+/logs/
+logs/
+**logs/
+log_*
+performance.log
+sql_generator.log
+orchestrator.log
+server.log
+sql_ai_agent.log
+join_inference.log
+debug_pipeline.log
+agent/performance.log
+agent/sql_generator.log
+server/logs/
+
+# Temporary Files
+*.tmp
+*.temp
+.tmp/
+temp/
+tmp/
+*.bak
+*.backup
+*~
+*.orig
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.virtualenv/
+.conda/
+miniconda3/
+anaconda3/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Python Environment
+.python-version
+Pipfile.lock
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Node.js (if you have any frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# API Keys and Secrets
+secrets.toml
+.streamlit/secrets.toml
+config/secrets/
+.secrets/
+api_keys.txt
+credentials.json
+
+# Streamlit Configuration
+.streamlit/secrets.toml
+.streamlit/config.toml
+
+# FastAPI
+.fastapi/
+
+# Docker
+.dockerignore
+Dockerfile.dev
+docker-compose.override.yml
+
+# Monitoring and Metrics
+monitoring/logs/
+metrics/
+performance_data/
+monitoring/dashboard/data/
+usage_statistics/
+
+# Project Specific Files
+# Test and diagnostic files
+*test_results*.log
+*test_results*.json
+pipeline_test_results_*.log
+promptbuilder_test_results*.json
+tblcounterparty_results.csv
+pure_learning.db
+
+# Generated and temporary scripts
+diagnose_schema_metadata.py
+warning_resover_cache.py
+async_timeout_fix_guide.txt
+
+# Output directory contents
+restructure_summary.txt
+MCP_Complete_Input_Output_Report_*.ods
+MCP_Complete_Input_Output_Report_*.xlsx
+schema_filtering_test_results_*.json
+mathstral_filtering_test_results_*.json
+counterpart_query_results_*.json
+
+# Keep important files (exceptions to above rules)
+!.gitignore
+!requirements.txt
+!requirements_server.txt
+!README.md
+!LICENSE
+!Dockerfile
+!docker-compose.yml
+!.github/git n YAML files are kept
+!**/*.yaml
+!**/*.yml
+
+# Keep Python package init files
+!**/__init__.py
+
+# Keep template and config directories structure
+!templates/
+!config/
+!**/templates/
+!**/config/

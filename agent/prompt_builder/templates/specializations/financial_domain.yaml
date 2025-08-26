@@ -1,0 +1,258 @@
+# Financial Domain Specialization Template
+# Specialized enhancements for financial database queries and business logic
+
+specialization_type: "financial_domain"
+description: "Financial industry specific enhancements for SQL generation"
+priority: 3
+applies_to: ["all_query_types"]
+
+# Financial domain system additions
+system_additions:
+  domain_expertise: "Financial database specialist with deep understanding of counterparty risk, positions, and trading data"
+  precision_requirements: "Handle financial amounts with precision - use appropriate decimal types"
+  currency_awareness: "Consider currency handling and conversion requirements"
+  regulatory_compliance: "Ensure queries support regulatory reporting and compliance requirements"
+  business_logic: "Apply financial business rules and hierarchies appropriately"
+
+# Financial-specific instruction additions
+instruction_additions: |
+  FINANCIAL DOMAIN REQUIREMENTS:
+  - Handle monetary amounts with appropriate precision (DECIMAL, MONEY types)
+  - Consider currency codes and conversion requirements
+  - Apply counterparty hierarchy and relationship logic
+  - Handle position dates, trade dates, and settlement dates correctly
+  - Consider active vs historical data filtering
+  - Apply appropriate risk calculation methodologies
+  - Handle NULL values in financial calculations appropriately
+  - Consider regulatory and compliance data requirements
+
+# Financial entity patterns
+financial_entities:
+  
+  counterparty_patterns:
+    table_naming: ["tblcounterparty", "tblcounterparties", "counterparty", "cpty"]
+    key_attributes: ["counterparty_id", "cpty_id", "counterparty_code", "legal_entity_name"]
+    classifications: ["customer_type", "counterparty_type", "entity_type", "classification"]
+    hierarchies: ["parent_counterparty", "ultimate_parent", "group_id"]
+    status_fields: ["status", "active_flag", "enabled", "is_active"]
+    
+  position_patterns:
+    table_naming: ["tblpositions", "tblposition", "positions", "pos"]
+    key_attributes: ["position_id", "pos_id", "position_key"]
+    amounts: ["position_amount", "market_value", "notional_amount", "exposure"]
+    dates: ["position_date", "trade_date", "settlement_date", "value_date"]
+    instruments: ["instrument_id", "security_id", "product_type"]
+    
+  trade_patterns:
+    table_naming: ["tbltrades", "tbltrade", "trades", "trd"]
+    key_attributes: ["trade_id", "trd_id", "trade_reference", "deal_id"]
+    amounts: ["trade_amount", "notional", "price", "quantity"]
+    parties: ["counterparty_id", "trader_id", "desk_id", "book_id"]
+    lifecycle: ["trade_status", "settlement_status", "confirmation_status"]
+
+# Financial business logic patterns
+business_logic_patterns:
+  
+  counterparty_queries:
+    active_filtering: "Always consider active/inactive status unless historical data requested"
+    hierarchy_navigation: "Use parent-child relationships for group reporting"
+    type_classification: "Common types: BANK, HEDGE_FUND, CORPORATE, GOVERNMENT"
+    risk_ratings: "Include risk ratings and limits when available"
+    
+  position_analysis:
+    date_filtering: "Use appropriate date filters (trade date vs position date vs value date)"
+    currency_handling: "Consider base currency conversion for multi-currency positions"
+    aggregation_levels: "Common aggregations: by counterparty, by instrument, by book"
+    mark_to_market: "Include current market values and P&L calculations"
+    
+  trade_reporting:
+    lifecycle_status: "Filter by trade status (PENDING, CONFIRMED, SETTLED, CANCELLED)"
+    settlement_handling: "Consider settlement dates and status for cash flows"
+    regulatory_fields: "Include regulatory reporting fields when required"
+    amendment_tracking: "Handle trade amendments and versioning"
+
+# Financial calculation patterns
+calculation_patterns:
+  
+  monetary_precision:
+    decimal_handling: "Use DECIMAL(19,4) or similar for monetary amounts"
+    rounding_rules: "Apply consistent rounding rules for calculations"
+    currency_conversion: "Use appropriate FX rates with proper date alignment"
+    
+  risk_calculations:
+    exposure_metrics: "Calculate gross and net exposures appropriately"
+    var_calculations: "Use proper statistical methods for VaR calculations"
+    concentration_limits: "Apply concentration and limit checking logic"
+    
+  performance_metrics:
+    pnl_calculations: "Calculate realized and unrealized P&L correctly"
+    return_calculations: "Use appropriate return calculation methodologies"
+    benchmark_comparisons: "Include benchmark and relative performance metrics"
+
+# Financial domain examples
+examples:
+  counterparty_exposure: |
+    Example: "Show total exposure by counterparty type"
+    SELECT 
+        cp.counterparty_type,
+        COUNT(DISTINCT cp.counterparty_id) as counterparty_count,
+        SUM(pos.market_value) as total_exposure,
+        AVG(pos.market_value) as avg_exposure
+    FROM tblcounterparty cp
+    INNER JOIN tblpositions pos ON cp.counterparty_id = pos.counterparty_id
+    WHERE cp.status = 'ACTIVE'
+        AND pos.position_date = (SELECT MAX(position_date) FROM tblpositions)
+    GROUP BY cp.counterparty_type
+    ORDER BY total_exposure DESC
+
+  trade_settlement_report: |
+    Example: "Show pending settlements by counterparty"
+    SELECT 
+        cp.counterparty_id,
+        cp.legal_entity_name,
+        t.trade_id,
+        t.trade_date,
+        t.settlement_date,
+        t.notional_amount,
+        t.currency_code
+    FROM tblcounterparty cp
+    INNER JOIN tbltrades t ON cp.counterparty_id = t.counterparty_id
+    WHERE t.settlement_status = 'PENDING'
+        AND t.settlement_date <= DATEADD(day, 3, GETDATE())
+    ORDER BY t.settlement_date ASC, cp.legal_entity_name
+
+  position_pnl_analysis: |
+    Example: "Calculate daily P&L by trading book"
+    SELECT 
+        pos.book_id,
+        pos.position_date,
+        SUM(pos.market_value) as total_market_value,
+        SUM(pos.cost_basis) as total_cost_basis,
+        SUM(pos.market_value - pos.cost_basis) as unrealized_pnl
+    FROM tblpositions pos
+    WHERE pos.position_date >= DATEADD(day, -30, GETDATE())
+        AND pos.status = 'ACTIVE'
+    GROUP BY pos.book_id, pos.position_date
+    ORDER BY pos.book_id, pos.position_date
+
+  regulatory_reporting: |
+    Example: "Generate regulatory exposure report"
+    SELECT 
+        cp.counterparty_id,
+        cp.legal_entity_name,
+        cp.regulatory_classification,
+        SUM(CASE WHEN pos.position_type = 'LONG' THEN pos.market_value ELSE 0 END) as long_exposure,
+        SUM(CASE WHEN pos.position_type = 'SHORT' THEN ABS(pos.market_value) ELSE 0 END) as short_exposure,
+        SUM(pos.market_value) as net_exposure
+    FROM tblcounterparty cp
+    INNER JOIN tblpositions pos ON cp.counterparty_id = pos.counterparty_id
+    WHERE pos.position_date = (SELECT MAX(position_date) FROM tblpositions)
+        AND cp.regulatory_classification IN ('BANK', 'FINANCIAL_INSTITUTION')
+    GROUP BY cp.counterparty_id, cp.legal_entity_name, cp.regulatory_classification
+    HAVING ABS(SUM(pos.market_value)) > 1000000  -- Material exposures only
+    ORDER BY ABS(SUM(pos.market_value)) DESC
+
+# Financial validation rules
+financial_validation_rules:
+  - "Monetary amounts must use appropriate precision data types"
+  - "Date filtering should consider business day conventions"
+  - "Currency codes should be included for multi-currency calculations"
+  - "Active/inactive status filtering should be applied unless historical data requested"
+  - "Regulatory and compliance fields should be included when applicable"
+  - "Risk calculations should follow industry standard methodologies"
+  - "Position and trade reconciliation logic should be maintained"
+
+# Financial data quality considerations
+data_quality_patterns:
+  
+  date_handling:
+    business_days: "Consider business day calendars for financial calculations"
+    time_zones: "Handle timezone differences for global trading"
+    cutoff_times: "Apply appropriate cutoff times for daily processing"
+    holiday_handling: "Consider market holidays in date calculations"
+    
+  currency_handling:
+    base_currency: "Identify and use base currency for reporting"
+    fx_rates: "Use appropriate FX rates with correct value dates"
+    currency_precision: "Apply currency-specific precision rules"
+    cross_currency: "Handle cross-currency calculations appropriately"
+    
+  precision_handling:
+    monetary_amounts: "Use appropriate decimal precision for money"
+    percentage_calculations: "Handle percentage calculations with precision"
+    rounding_rules: "Apply consistent rounding across calculations"
+    scale_considerations: "Consider scale (thousands, millions) for large amounts"
+
+# Regulatory and compliance patterns
+regulatory_patterns:
+  
+  basel_compliance:
+    capital_calculations: "Support Basel capital calculation requirements"
+    risk_weightings: "Apply appropriate risk weightings by asset class"
+    exposure_calculations: "Calculate exposures according to Basel standards"
+    
+  ifrs_compliance:
+    fair_value_accounting: "Support fair value accounting requirements"
+    impairment_calculations: "Include impairment and provision calculations"
+    hedge_accounting: "Handle hedge accounting relationships"
+    
+  reporting_requirements:
+    trade_reporting: "Support trade reporting to regulatory authorities"
+    position_reporting: "Enable position reporting for regulatory compliance"
+    risk_reporting: "Support risk metric reporting requirements"
+
+# Performance optimization for financial queries
+financial_performance:
+  
+  indexing_strategies:
+    date_indexes: "Create indexes on key date columns (trade_date, position_date)"
+    counterparty_indexes: "Index counterparty_id for join performance"
+    status_indexes: "Index status and active flags for filtering"
+    composite_indexes: "Use composite indexes for common query patterns"
+    
+  partitioning_strategies:
+    date_partitioning: "Partition large tables by date (monthly/quarterly)"
+    counterparty_partitioning: "Consider partitioning by counterparty for large datasets"
+    currency_partitioning: "Partition by currency for multi-currency systems"
+    
+  aggregation_optimization:
+    pre_aggregation: "Consider pre-aggregated tables for common reports"
+    materialized_views: "Use materialized views for complex calculations"
+    summary_tables: "Maintain summary tables for performance"
+
+# Integration patterns
+integration_patterns:
+  
+  multi_system_queries:
+    source_system_tracking: "Include source system identifiers"
+    data_lineage: "Track data lineage for audit requirements"
+    reconciliation_support: "Enable cross-system reconciliation"
+    
+  real_time_requirements:
+    intraday_reporting: "Support intraday position and risk reporting"
+    streaming_data: "Handle streaming trade and market data"
+    low_latency_queries: "Optimize for low-latency requirements"
+    
+  batch_processing:
+    end_of_day_processing: "Support end-of-day batch processing requirements"
+    month_end_processing: "Enable month-end and period-end calculations"
+    regulatory_deadlines: "Meet regulatory reporting deadlines"
+
+# Template inheritance and compatibility
+template_inheritance:
+  extends_all_query_types: true
+  financial_enhancements:
+    - "Monetary precision handling"
+    - "Currency and FX considerations"
+    - "Regulatory compliance support"
+    - "Financial business logic"
+    - "Risk calculation patterns"
+  
+  compatible_with:
+    - "query_types/simple_select.yaml"
+    - "query_types/join_query.yaml"
+    - "query_types/aggregation.yaml"
+    - "query_types/xml_extraction.yaml"
+  
+  specialization_priority: "high"
+  override_behavior: "enhance_and_extend"
